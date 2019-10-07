@@ -50,47 +50,46 @@ bases_df <- tibble(bases_individuales_path) %>%
 
 # Crear una **función** llamada _HolaMundo_ que imprima el texto "Hola mundo"
 
-HolaM <- function(){
-  print("Hola mundo")
+holaMundo <- function()
+{
+  print('Hola Mundo')
 }
+holaMundo()
 
-HolaM()
 
 # - Crear una **función** que devuelva la sumatoria de los números enteros comprendidos entre 1 y un parámetro _x_ a definir.
 
-Sumatoria_enteros <- function(x){
-  Vector <- 1:x
-  return(sum(Vector))
+sumameEste <- function(este)
+{
+  numeros <- 1:este
+  return(sum(numeros))
 }
+sumameEste(15)
+sumameEste(este = 15)
 
-Sumatoria_enteros(x = 10)
 
 # - Levantar la base Individual del 4to trimestre de 2016
 
-individual_t416 <- read.table("Fuentes/usu_individual_t416.txt",
-                              sep=";", dec=",", header = TRUE, fill = TRUE)
+base_individual_t416 <- read.table('../CodigoProf/Fuentes/usu_individual_t416.txt', 
+                                   sep=';', dec=',',header = TRUE, fill = TRUE)
 
 # - Guardar la base Individual del 4to trimestre de 2016 como un archivo de extensión .RDS
-saveRDS(individual_t416,"Resultados/Base_formato_r.RDS")
+saveRDS(base_individual_t416,"../CodigoProf/Resultados/Base_formato_r.RDS")
 
 # - Volver a levantar la base, pero como .RDS y asignarla con el nombre _BaseRDS_ ¿tarda más o menos?
-Base_RDS <- readRDS("Resultados/Base_formato_r.RDS")
+Base_RDS <- readRDS("../CodigoProf/Resultados/Base_formato_r.RDS")
 
 
 # - Crear una **función** que calcule la frecuencia expandida por un ponderador a designar
 
-
-expansion <- function(data){
-  
+expansion <- function(data)
+{
   sum(data['PONDERA'])
 }
-
-expansion(individual_t416)
-
+expansion(base_individual_t416)
 
 
 # - Utilizar dicha función para calcular la frecuencia poblaciónal por Sexo y Región
-
 
 
 ## usando dplyr
