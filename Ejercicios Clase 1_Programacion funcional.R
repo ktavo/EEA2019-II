@@ -1,7 +1,51 @@
 #Reiniciar R
 
+
+setwd("E:/UBA/2019-II/EEA/R Code")
+
+#install.packages('tidyverse', dependencies=TRUE, repos='http://cran.rstudio.com/')
+
 library(tidyverse)
 library(purrr)
+
+library(openxlsx)
+library(ggthemes)
+library(fs)
+
+ABC_123 <- data.frame(Letras = LETTERS[1:20],Num = 1:20)
+funcion_prueba <- function(parametro1,parametro2) {
+  paste(parametro1, parametro2, sep = " <--> ")
+}
+funcion_prueba(parametro1 = "A ver", parametro2 = "Que pasa")
+resultado <- map2(.x = ABC_123$Letras, .y = ABC_123$Num,.f = funcion_prueba)
+resultado[1:3]
+resultado[1:3] %>% unlist()
+
+#Combinacion de todas las letras con todos los numeros
+map(.x = ABC_123$Letras,.f = funcion_prueba,ABC_123$Num)[1:2]
+ABC_123 %>% mutate(resultado= map(Letras,funcion_prueba,Num))
+
+#Funciones anónimas
+map_dbl(.x = c(1:10), .f = function(x) x^2) 
+
+# Buscamos en el path aquellos aquellos archivos que matchean a la expresion regular
+bases_individuales_path <- dir_ls(path = '../CodigoProf/Fuentes/', regexp= 'individual')
+bases_individuales_path
+
+
+leer_base_eph <- function(path) {
+  # Lectura de archivo
+  read.table(path,sep=";", dec=",", header = TRUE, fill = TRUE) %>%
+    # Seleccion de variables relevantes
+    select(ANO4,TRIMESTRE,REGION,P21,CH04, CH06)
+}
+# Leer a un dataframe las tablas especificadas en el vector de bases individuales
+bases_df <- tibble(bases_individuales_path) %>%
+    mutate(base = map(.x = bases_individuales_path, .f = leer_base_eph))
+
+
+
+
 
 
 # Crear una **función** llamada _HolaMundo_ que imprima el texto "Hola mundo"
