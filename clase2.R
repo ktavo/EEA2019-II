@@ -3,7 +3,7 @@
 rm(list=ls())
 setwd("E:/UBA/2019-II/EEA/R Code")
 
-#install.packages('tidyverse', dependencies=TRUE, repos='http://cran.rstudio.com/')
+#install.packages('ggridges', dependencies=TRUE, repos='http://cran.rstudio.com/')
 
 library("tidyverse")
 library("dplyr")
@@ -152,6 +152,94 @@ hour(fecha) #Obtener la hora
 fecha + days(2)
 # Resto 1 semana y dos horas
 fecha - (weeks(1) + hours(2))
+
+
+
+#ggplot2
+#ggplot tiene su sintaxis propia. La idea central es pensar los gráficos como una sucesión de capas, que se construyen una a la vez.
+#El operador + nos permite incorporar nuevas capas al gráfico.
+
+#El comando ggplot() nos permite definir los datos y las variables (x,y,color,forma,etc).
+#Las sucesivas capas nos permiten definir:
+  #Uno o más tipos de gráficos (de columnas, geom_col(), de línea, geom_line(), de puntos,geom_point(), boxplot, geom_boxplot())
+  #Títulos labs()
+  #Estilo del gráfico theme()
+  #Escalas de los ejes scale_y_continuous,scale_x_discrete
+  #División en subconjuntos facet_wrap(),facet_grid()
+
+library(ggplot2)
+library(ggthemes)  # estilos de gráficos
+library(ggrepel)   # etiquetas de texto más prolijas que las de ggplot
+library(scales)    # tiene la función 'percent()'
+
+
+ggplot(data = iris, aes(x = Petal.Length, Petal.Width, color = Species))+
+  geom_point(alpha=0.75)+
+  labs(title = "Medidas de los pétalos por especie")+
+  theme(legend.position = 'none')+
+  facet_wrap(~Species)
+
+#Paso a paso
+#Ejes
+g <- ggplot(data = iris, aes(x = Petal.Length, Petal.Width, color = Species))
+g
+#Gráfico ocn densidad de puntos
+g <- g +  geom_point(alpha=0.25)
+g
+
+#Paso siguiente
+#Definir el título del gráfico
+#Quitar la leyenda
+#Abrir el gráfico en tres fragmentos, uno para cada especie
+g <- g +
+  labs(title = "Medidas de los pétalos por especie")+
+  theme(legend.position = 'none')+
+  facet_wrap(~Species)
+g
+
+#Extensiones de ggplot GGally
+library(GGally)
+ggpairs(iris,  mapping = aes(color = Species))
+
+
+#Extensiones de ggplot ggridges
+library(ggridges)
+ggplot(iris, aes(x = Sepal.Length, y = Species, fill=Species)) + 
+  geom_density_ridges()
+
+#Ejemplo con individuo t117
+Individual_t117 <- read.table(paste0("../CodigoProf/Fuentes/usu_individual_t117.txt"),
+                              sep=";", dec=",", header = TRUE, fill = TRUE)
+
+ggdata <- Individual_t117 %>% 
+  filter(P21>0, !is.na(NIVEL_ED)) %>% 
+  mutate(NIVEL_ED = as.factor(NIVEL_ED),
+         CH04     = as.factor(CH04))
+
+
+ggplot(ggdata, aes(x = NIVEL_ED, y = P21, group = NIVEL_ED, fill = NIVEL_ED )) +
+  geom_boxplot()+
+  scale_y_continuous(limits = c(0, 40000))
+
+
+ggplot(ggdata, aes(x= NIVEL_ED, y = P21, group = NIVEL_ED, fill = NIVEL_ED )) +
+  geom_boxplot()+
+  scale_y_continuous(limits = c(0, 40000))+
+  facet_wrap(~ CH04, labeller = "label_both")
+
+
+ggplot(ggdata, aes(x= CH04, y = P21, group = CH04, fill = CH04 )) +
+  geom_boxplot()+
+  scale_y_continuous(limits = c(0, 40000))+
+  facet_wrap(~ NIVEL_ED, labeller = "label_both")
+
+
+
+
+
+
+
+
 
 
 
