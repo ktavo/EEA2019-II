@@ -19,7 +19,29 @@ glimpse(dolarDiario)
 glimpse(ipcMensual)
 
 dolarDiario <- dolarDiario %>% rename(tipoCambio = Tipo.de.Cambio.de.Referencia...en.Pesos...por.Dólar)
-
 dolarDiario <- dolarDiario %>% mutate(date=dmy(Fecha), year=year(date), month=month(date), day=day(date))
+
+fecha_cotizacion= dolarDiario %>% group_by(year,month) %>% summarise(day=min(day))
+
+#Innerjoin  para primer día del mes
+dolarDiario = dolarDiario %>%
+  inner_join(fecha_cotizacion, by=c('year', 'month', 'day')) %>%
+  select(-c(Fecha, day))
+
+
+dolarGraph <- ggplot(data = dolarDiario, aes(x = date, y = tipoCambio))+
+                    geom_line() + 
+                    labs(x = "Fecha", y = "Tipo de Cambio" ,title = "Tipo de cambio vs tiempo")
+dolarGraph
+
+
+
+
+
+
+
+
+
+
 
 
