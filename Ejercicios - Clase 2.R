@@ -34,6 +34,25 @@ dolarGraph <- ggplot(data = dolarDiario, aes(x = date, y = tipoCambio))+
                     labs(x = "Fecha", y = "Tipo de Cambio" ,title = "Tipo de cambio vs tiempo")
 dolarGraph
 
+#IPC
+ipcMensual = ipcMensual %>% gather(., key = date,value = ipc, 2:29)
+glimpse(ipcMensual)
+
+ipcMensual <- ipcMensual %>% mutate(date=ymd(parse_date_time(date, orders = "my")), 
+                                    year=year(date), month=month(date))
+
+ipcMensualGeneral <- ipcMensual %>% filter(Apertura == "Nivel general")
+
+ipcGraph <- ggplot(data = ipcMensualGeneral, aes(x = date, y = ipc)) +
+                    geom_point(color="firebrick") +
+                    geom_line(size= 1,alpha=0.75, color = "firebrick") + 
+                    labs(x = "Fecha", y = "IPC Mensual", title = "Evolución IPC")
+ipcGraph
+
+
+
+
+
 
 
 
