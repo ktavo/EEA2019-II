@@ -234,6 +234,131 @@ ggplot(ggdata, aes(x= CH04, y = P21, group = CH04, fill = CH04 )) +
   facet_wrap(~ NIVEL_ED, labeller = "label_both")
 
 
+#Kernels
+
+datagraf <-Individual_t117 %>% 
+  select(REGION,P47T,T_VI, TOT_P12, P21 , PONDII, CH04) %>% 
+  filter(!is.na(P47T), P47T > 0 ) %>% 
+  mutate(REGION             = case_when(REGION == 1    ~ 'GBA',
+                                        REGION == 40   ~ 'NOA',
+                                        REGION == 41   ~ 'NEA',
+                                        REGION == 42   ~ 'Cuyo',
+                                        REGION == 43   ~ 'Pampeana',
+                                        REGION == 44   ~ 'Patagonia',
+                                        FALSE          ~ 'otro'),
+         ingreso_laboral    = as.numeric(TOT_P12 + P21),
+         ingreso_no_laboral = as.numeric(T_VI),
+         CH04               = case_when(CH04 == 1 ~ "Varon",
+                                        CH04 == 2 ~ "Mujer",
+                                        FALSE     ~ "Otro") ) %>% 
+  gather(., key = Tipo_ingreso, Ingreso, c((ncol(.)-1):ncol(.)))
+datagraf  
+
+
+datagraf2 <- datagraf %>% filter( Ingreso !=0)
+
+ggplot(datagraf2, aes(
+  x = Ingreso,
+  weights = PONDII,
+  group = Tipo_ingreso,
+  fill = Tipo_ingreso)) +
+  geom_density(alpha=0.7,adjust =2)+
+  labs(x="Distribución del ingreso", y="",
+       title=" Total según tipo de ingreso y género", 
+       caption = "Fuente: Encuesta Permanente de Hogares")+
+  scale_x_continuous(limits = c(0,50000))+
+  theme_tufte()+
+  scale_fill_gdocs()+
+  theme(legend.position = "bottom",
+        plot.title      = element_text(size=12))+
+  facet_wrap(~ CH04, scales = "free")
+
+ggsave(filename = paste0("../CodigoProf/Resultados/", "Kernel_1.png"),scale = 2)
+
+
+ggplot(datagraf2, aes(
+  x = Ingreso,
+  weights = PONDII,
+  group = CH04,
+  fill = CH04)) +
+  geom_density(alpha=0.7,adjust =2)+
+  labs(x="Distribución del ingreso", y="",
+       title=" Total según tipo de ingreso y género", 
+       caption = "Fuente: Encuesta Permanente de Hogares")+
+  scale_x_continuous(limits = c(0,50000))+
+  theme_tufte()+
+  scale_fill_gdocs()+
+  theme(legend.position = "bottom",
+        plot.title      = element_text(size=12))+
+  facet_wrap(~Tipo_ingreso, scales = "free")
+
+ggsave(filename = paste0("../CodigoProf/Resultados/", "Kernel_2.png"),scale = 2)
+
+
+#Tendencia
+
+ggdata <- Individual_t117 %>% 
+  filter(P21>0,
+         !is.na(NIVEL_ED),
+         NIVEL_ED!=7, 
+         PP04A !=3) %>% 
+  mutate(NIVEL_ED = factor(case_when(NIVEL_ED == 1  ~ 'Primaria \n Incompleta', # '\n' significa carriage return, o enter
+                                     NIVEL_ED == 2  ~ 'Primaria \n Completa',
+                                     NIVEL_ED == 3  ~ 'Secundaria \nIncompleta',
+                                     NIVEL_ED == 4  ~ 'Secundaria \nCompleta',
+                                     NIVEL_ED == 5  ~ 'Superior \nUniversitaria \nIncompleta',
+                                     NIVEL_ED == 6  ~ 'Superior \nUniversitaria \nCompleta',
+                                     FALSE          ~ 'Otro'),
+                           levels= c('Primaria \n Incompleta',
+                                     'Primaria \n Completa',
+                                     'Secundaria \nIncompleta',
+                                     'Secundaria \nCompleta',
+                                     'Superior \nUniversitaria \nIncompleta',
+                                     'Superior \nUniversitaria \nCompleta')),
+         Sexo     = case_when(CH04 == 1 ~ 'Varón',
+                              CH04 == 2 ~ 'Mujer'),
+         Establecimiento    = case_when(PP04A == 1 ~ 'Estatal',
+                                        PP04A == 2 ~ 'Privado',
+                                        FALSE      ~ 'Otro'))
+
+ggdata
+
+ggplot(ggdata, aes(CH06, P21, colour = Sexo, shape = Sexo, alpha = P21))+
+  geom_smooth() + 
+  labs(
+    x = 'Edad',
+    y = 'ingreso',
+    title = 'Ingreso por ocupación principal',
+    subtitle = 'Según edad, nivel educativo y sexo') +
+  theme_minimal()+
+  scale_y_continuous(labels = comma)+
+  scale_alpha(guide = FALSE)+
+  facet_grid(.~NIVEL_ED)
+
+
+
+ggplot(ggdata, aes(CH06, P21, colour = Sexo, weight = PONDIIO)) +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2)) +
+  labs(x = 'Edad',
+       y = 'ingreso',
+       title = 'Regresion cuadrática del Ingreso por ocupación principal respecto de la Edad',
+       subtitle = 'Según Nivel educativo y sexo') +
+  theme_minimal()+
+  facet_grid(. ~ NIVEL_ED)
+
+
+
+ggplot(ggdata, aes(CH06, P21, colour = Establecimiento, weight = PONDIIO)) +
+  geom_smooth(method = "lm") +
+  labs(
+    x = 'Edad',
+    y = 'ingreso',
+    title = 'Tendencia del ingreso por ocupación principal',
+    subtitle = 'Según edad, nivel educativo, sexo y tipo de establecimiento') +
+  theme_minimal()+
+  facet_grid(Sexo ~ NIVEL_ED)
+
+ggsave(filename = paste0("../Resultados/", "regresion lineal.png"),scale = 2)
 
 
 
