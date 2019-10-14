@@ -30,7 +30,8 @@ dolarDiario = dolarDiario %>%
 
 
 dolarGraph <- ggplot(data = dolarDiario, aes(x = date, y = tipoCambio))+
-                    geom_line() + 
+                    geom_point(color="seagreen") +
+                    geom_line(size= 1,alpha=0.75, color = "seagreen") +  
                     labs(x = "Fecha", y = "Tipo de Cambio" ,title = "Tipo de cambio vs tiempo")
 dolarGraph
 
@@ -49,18 +50,58 @@ ipcGraph <- ggplot(data = ipcMensualGeneral, aes(x = date, y = ipc)) +
                     labs(x = "Fecha", y = "IPC Mensual", title = "Evolución IPC")
 ipcGraph
 
+#IPC por grupo
+ipcGroupGraph <- ggplo(data = ipcMensualGeneral, aes(x = date, y = ipc)) +
 
 
 
+ipcGroupGraph <- ggplot(ipcMensual, aes(x= date, y = ipc, group = Apertura, color = Apertura )) +
+                        geom_point()+
+                        geom_line(size=1,alpha=0.75)+
+                        labs(x="Fecha", y="IPC", title="Evolución del IPC por grupo")+
+                        theme_bw()+
+                        scale_color_brewer(palette = "Set1")
+ipcGroupGraph
+
+#Join dolar e ipc
+ipc_dolar <- ipcMensual %>% inner_join(dolarDiario, by=c("year", "month"))
+glimpse(ipc_dolar)
+
+ipc_dolar = ipc_dolar %>% rename(date=date.x) %>% select(-date.y)
 
 
+resumen = ipc_dolar %>% filter(Apertura=="Nivel general") %>%
+  group_by(year) %>% 
+  summarise(dolar_promedio=mean(tipoCambio),
+            desvio_dolar=sd(tipoCambio),
+            mediana_dolar=median(tipoCambio),
+            rango_dolar=max(tipoCambio)-min(tipoCambio),
+            ipc_promedio=mean(ipc),
+            desvio_ipc=sd(ipc),
+            mediana_ipc=median(ipc),
+            rango_ipc=max(ipc)-min(ipc))
+resumen
 
 
+#IPC Versus Dolar
 
+ggplot()+
+  geom_line(data = ipc_dolar %>% filter(Apertura=="Nivel general"),aes(x=date,y=ipc, color ="Nivel general"))+
+  geom_line(data = ipc_dolar,aes(date,tipoCambio*10, color ="Dolar"))+
+  labs(x="Fecha", y="IPC", title="Evolución del IPC y Dolar")+
+  theme_bw()+
+  scale_y_continuous(sec.axis = sec_axis(~.*.1, name = "Dolar"))
 
+#IPC versus dolar por aperturas
 
-
-
+ggplot()+
+  geom_line(data = ipc_dolar,aes(date,ipc))+
+  geom_line(data = ipc_dolar,aes(date,tipoCambio*7, color ="Dolar"))+
+  scale_y_continuous(sec.axis = sec_axis(~./7, name = "Dolar"))+
+  scale_colour_manual("Color",values=c("darkgreen"))+
+  theme_bw()+
+  labs(x="Fecha", y="IPC", title="Evolución del IPC y Dolar por grupo")+
+  facet_wrap(.~Apertura)
 
 
 
