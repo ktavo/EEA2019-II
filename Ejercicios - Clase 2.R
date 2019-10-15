@@ -30,9 +30,9 @@ dolarDiario = dolarDiario %>%
 
 
 dolarGraph <- ggplot(data = dolarDiario, aes(x = date, y = tipoCambio))+
-                    geom_point(color="seagreen") +
-                    geom_line(size= 1,alpha=0.75, color = "seagreen") +  
-                    labs(x = "Fecha", y = "Tipo de Cambio" ,title = "Tipo de cambio vs tiempo")
+  geom_point(color="seagreen") +
+  geom_line(size= 1,alpha=0.75, color = "seagreen") +  
+  labs(x = "Fecha", y = "Tipo de Cambio" ,title = "Tipo de cambio vs tiempo")
 dolarGraph
 
 #IPC
@@ -45,22 +45,22 @@ ipcMensual <- ipcMensual %>% mutate(date=ymd(parse_date_time(date, orders = "my"
 ipcMensualGeneral <- ipcMensual %>% filter(Apertura == "Nivel general")
 
 ipcGraph <- ggplot(data = ipcMensualGeneral, aes(x = date, y = ipc)) +
-                    geom_point(color="firebrick") +
-                    geom_line(size= 1,alpha=0.75, color = "firebrick") + 
-                    labs(x = "Fecha", y = "IPC Mensual", title = "Evolución IPC")
+  geom_point(color="firebrick") +
+  geom_line(size= 1,alpha=0.75, color = "firebrick") + 
+  labs(x = "Fecha", y = "IPC Mensual", title = "Evolución IPC")
 ipcGraph
 
 #IPC por grupo
 ipcGroupGraph <- ggplo(data = ipcMensualGeneral, aes(x = date, y = ipc)) +
-
-
-
-ipcGroupGraph <- ggplot(ipcMensual, aes(x= date, y = ipc, group = Apertura, color = Apertura )) +
-                        geom_point()+
-                        geom_line(size=1,alpha=0.75)+
-                        labs(x="Fecha", y="IPC", title="Evolución del IPC por grupo")+
-                        theme_bw()+
-                        scale_color_brewer(palette = "Set1")
+  
+  
+  
+  ipcGroupGraph <- ggplot(ipcMensual, aes(x= date, y = ipc, group = Apertura, color = Apertura )) +
+  geom_point()+
+  geom_line(size=1,alpha=0.75)+
+  labs(x="Fecha", y="IPC", title="Evolución del IPC por grupo")+
+  theme_bw()+
+  scale_color_brewer(palette = "Set1")
 ipcGroupGraph
 
 #Join dolar e ipc

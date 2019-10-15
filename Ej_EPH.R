@@ -6,8 +6,8 @@ library(tidyverse)
 library(ggthemes)
 library(ggridges)
 
-bases.dir      <-  "../Fuentes/"
-resultados.dir <- "../Resultados/"
+bases.dir      <-  "../CodigoProf/Fuentes/"
+resultados.dir <- "../CodigoProf/Resultados/"
 
 
 Individual_t117 <- read.table(paste0(bases.dir,"usu_individual_t117.txt"),
