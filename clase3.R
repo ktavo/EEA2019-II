@@ -45,11 +45,42 @@ gapminder_unfiltered %>%
 data_argentina <- gapminder_unfiltered %>% 
   filter(country=='Argentina')
 
+#Información de Colombia
+data_colombia <- gapminder_unfiltered %>% 
+  filter(country=='Colombia')
+
+#Información de Canadá
+data_canada <- gapminder_unfiltered %>% 
+  filter(country=='Canada')
+
+#Gráfica Argentina
 ggplot(data_argentina, aes(year, lifeExp, size= pop, color=gdpPercap))+
   geom_point()+
   geom_line(alpha=0.6)+
   labs(title = unique(data_argentina$country))
 
+#Gráfica Colombia
+ggplot(data_colombia, aes(year, lifeExp, size= pop, color=gdpPercap))+
+  geom_point()+
+  geom_line(alpha=0.6)+
+  labs(title = unique(data_colombia$country))
 
+#Gráfica Canada
+ggplot(data_canada, aes(year, lifeExp, size= pop, color=gdpPercap))+
+  geom_point()+
+  geom_line(alpha=0.6)+
+  labs(title = unique(data_canada$country))
+
+graficar_pais <- function(pais)
+{
+  dataPais <- gapminder_unfiltered %>% 
+    filter(country==pais)
+  ggplot(dataPais, aes(year, lifeExp, size= pop, color=gdpPercap))+
+    geom_point()+
+    geom_line(alpha=0.6)+
+    labs(title = pais)
+}
+
+graficar_pais("Chile")
 
 
