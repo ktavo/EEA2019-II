@@ -81,6 +81,46 @@ graficar_pais <- function(pais)
     labs(title = pais)
 }
 
-graficar_pais("Chile")
+graficar_pais("Colombia")
+graficar_pais("Mozambique")
+graficar_pais("Italy")
+graficar_pais("United States")
+graficar_pais("Canada")
+graficar_pais("Venezuela")
+graficar_pais("Uganda")
+graficar_pais("Central African Republic")
+
+#Armamos un data setNesteado
+gapminder_nest <- gapminder_unfiltered %>% 
+  group_by(country) %>% 
+  nest()
+gapminder_nest[1:5,]
+
+
+
+# definimos la función
+graficar_pais2 <- function(data, pais){
+  
+  ggplot(data, aes(year, lifeExp, size= pop, color=gdpPercap))+
+    geom_point()+
+    geom_line(alpha=0.6)+
+    labs(title = pais)
+}
+
+gapminder_nest <- gapminder_nest %>% 
+  mutate(grafico= map2(.x = data, .y = country,.f =  graficar_pais2))
+
+gapminder_nest[1:5,]
+
+gapminder_nest$grafico[32]
+
+pdf('../CodigoProf/Resultados/graficos_gapminder.pdf')
+gapminder_nest$grafico
+dev.off()
+
+
+
+
+
 
 
