@@ -3,7 +3,8 @@
 rm(list=ls())
 setwd("E:/UBA/2019-II/EEA/R Code")
 
-#install.packages('gapminder', dependencies=TRUE, repos='http://cran.rstudio.com/')
+#install.packages('base64enc', dependencies=TRUE, repos='http://cran.rstudio.com/')
+
 library("fs")
 library("tidyverse")
 library("openxlsx")
