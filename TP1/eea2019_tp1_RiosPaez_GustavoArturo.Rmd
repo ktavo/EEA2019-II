@@ -1,0 +1,39 @@
+---
+title: "eea2019_tp1_RiosPaez_GustavoArturo"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+TP1 EEA
+
+1.Preparacion de los datos (I)
+    Leer el archivo ar_properties.csv y mostrar su estructura
+    
+    
+    Quedarse con aquellos registros que:
+    Pertenecen a Argentina y Capital Federal
+    Cuyo precio esta en dolares (USD)
+    El tipo de propiedad sea: Departamento, PH o Casa
+    El tipo de operacion sea Venta
+    
+Seleccionar las variables id, l3, rooms, bedrooms, bathrooms, surface_total, surface_covered, price y property_type
+
+Deberian llegar a un dataset con 61905 observaciones y 9 variables
+
+
+
+```{r}
+
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
