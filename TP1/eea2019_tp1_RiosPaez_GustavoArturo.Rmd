@@ -7,20 +7,56 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
-```{r}
-plot(cars)
-```
+
 TP1 EEA
 
+```{r}
+rm(list=ls())
+#Añadiendo las librerías necesarias
+
+```
+
 1.Preparacion de los datos (I)
-    Leer el archivo ar_properties.csv y mostrar su estructura
-    
-    
-    Quedarse con aquellos registros que:
-    Pertenecen a Argentina y Capital Federal
-    Cuyo precio esta en dolares (USD)
-    El tipo de propiedad sea: Departamento, PH o Casa
-    El tipo de operacion sea Venta
+Leer el archivo ar_properties.csv y mostrar su estructura
+
+Leyendo el archivo usando read.table
+Luego usando Glipse para dar un vistazo a la DB
+t0, t1 y tcorridaCSV serán usados para medir el tiempo de lectura del archivo
+```{r}
+t0       <-  Sys.time()
+ar_properties <- read.table("ar_properties.csv",
+                              sep=",",
+                              dec=".",
+                              header = TRUE,
+                              fill = TRUE)
+t1       <-  Sys.time()
+tcorridaCSV <-  as.numeric( t1 - t0, units = "secs")
+glimpse(ar_properties)
+```
+
+Vemos que los nombres de algunas variables son poco dicientes, por lo tanto modiicamos los nombres de esta acorde a lo que vemos en sus contenidos
+```{r}
+ar_properties <- ar_properties %>% rename("País" = "l1")
+ar_properties <- ar_properties %>% rename("Departamento" = "l2")
+ar_properties <- ar_properties %>% rename("Ciudad" = "l3")
+ar_properties <- ar_properties %>% rename("Barrio" = "l4")
+
+```
+
+
+Se empieza a filtrar la BD por:
+
+
+```{r}
+ar_properties %>% filter(INDICE>101 | GRUPO == "Privado_Registrado")
+
+```
+
+Quedarse con aquellos registros que:
+Pertenecen a Argentina y Capital Federal
+Cuyo precio esta en dolares (USD)
+El tipo de propiedad sea: Departamento, PH o Casa
+El tipo de operacion sea Venta
     
 Seleccionar las variables id, l3, rooms, bedrooms, bathrooms, surface_total, surface_covered, price y property_type
 
@@ -30,6 +66,14 @@ Deberian llegar a un dataset con 61905 observaciones y 9 variables
 
 ```{r}
 
+t0       <-  Sys.time()
+individual_t117 <- read.table("../CodigoProf/Fuentes/usu_individual_t117.txt",
+                              sep=";",
+                              dec=",",
+                              header = TRUE,
+                              fill = TRUE)
+t1       <-  Sys.time()
+tcorridaTXT <-  as.numeric( t1 - t0, units = "secs")
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.

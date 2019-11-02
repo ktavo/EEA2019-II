@@ -25,7 +25,7 @@ matriz <- matrix(data = c(A,B,C), nrow =3, ncol = 3)
 funcion_ejercicio_1(matriz)
 
 ## Ejercicio 2##
- 
+
 # 1) Crear un dataframe con el dataset de R: state.x77
 df <- state.x77
 
@@ -89,10 +89,10 @@ for(i in VEC0){
 # - Mediante un loop que itere sobre la variable VEC6 del dataframe _DFRAME_,
 ## imprimir un texto que combine el Valor de VEC6 y de VEC 0
 for(i in unique(DFRAME$VEC6)){
-
-A <- paste(DFRAME$VEC6[VEC6==i],DFRAME$VEC0[VEC6==i])
-print(A)
-
+  
+  A <- paste(DFRAME$VEC6[VEC6==i],DFRAME$VEC0[VEC6==i])
+  print(A)
+  
 }
 # - Reescribir el VEC1 del DATAFRAME para que sus elementos sean:
 ## El Doble de VEC_0, cuando éste sea mayor a 2
