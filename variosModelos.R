@@ -195,6 +195,7 @@ gapminder %>%
 
 #El comando tidy(model) nos permite obtener la salida del modelo lineal de forma prolija.
 #En el caso particular de un modelo. El output tradicional se vería de esta forma
+#Tenemos para intercept y year un valor estimado, error estándar y el p-value para ver su significatividad.
 
 nz_mod <- lm(lifeExp ~ year, data = nz)
 summary(nz_mod)
@@ -203,7 +204,102 @@ modeloColombia <- lm(lifeExp ~ year, data = expectativaColombia)
 summary(modeloColombia)
 
 
+#A la manera tidy
 
+tidy(nz_mod)
+tidy(modeloColombia)
+
+#Por ejemplo, obtengamos estos valores para todas las regresiones. 
+#Para ello, necesitamos mapear los modelos con la función tidy
+tdy <- by_country %>% 
+  mutate(tdy = map(model, tidy)) %>% 
+  unnest(tdy) %>% 
+  select(-c(data,model,resids))
+tdy
+
+#Con esta tabla, ahora podríamos graficar los coeficientes del modelo.
+#Para un sólo modelo (nz_mod):
+  
+tidy(nz_mod) %>% mutate(low = estimate - std.error,
+                          high = estimate + std.error) %>% 
+ggplot(., aes(estimate, term, xmin = low, xmax = high, height = 0)) +
+geom_point() +
+geom_vline(xintercept = 0, linetype="dashed", color = "darkgreen") +
+geom_errorbarh()
+
+#En este gráfico tenemos graficado cada uno de los parámetros del modelo, con +-1 desvío estándar. si quisiéramos comparar todos los modelos.
+#Con +-1 desvio para tener un intervalo de confianz "casero"
+tdy %>% mutate(low = estimate - std.error,
+               high = estimate + std.error) %>% 
+ggplot(., aes(estimate, term, xmin = low, xmax = high, height = 0, color = country)) +
+geom_point() +
+geom_vline(xintercept = 0, linetype="dashed", color = "darkgreen") +
+geom_errorbarh()+
+theme(legend.position = "none")
+
+#Augment
+#La función lm() también tiene una serie de gráficos para evaluar la calidad del modelo que pueden ser muy útiles para encontrar si un modelo esta mal calibrado.
+
+#Estos gráficos son:
+  
+#Residuos versus el modelo ajustado: El objetivo es que no veamos una estructura clara. 
+  #Si así la hubiera, esto implicaría que hay una parte sistemática del fenómeno que se 
+  #esta perdiendo.
+#Normal QQ plot: sirve para ver si los datos siguen una distribución teórica, en este caso,
+  #la \(\sim N(0,1)\). Los residuos estandarizados, si el modelo esta bien definido, deberían 
+  #seguir esta distribución
+#Scale-location plot: Similar al primer gráfico, pero utilizando la raíz cuadrada de los residuos
+  #estandarizados. De la misma forma que el anterior, buscamos que no haya una estructura en los
+  #residuos.
+#scale vs leverage: El leverage mide cuan influyentes son los puntos en el modelo. Si en este 
+  #gráfico algunas observaciones aparecen muy separadas, con mucho leverage y residuo, significa 
+  #que cambian mucho al modelo.
+
+plot(nz_mod)
+plot(modeloColombia)
+
+#La función augment(model, data) nos permite recuperar la información necesaria 
+#para estos gráficos de forma sistemática.
+
+au <- augment(nz_mod,nz)
+au
+
+aucol <- augment(modeloColombia, expectativaColombia)
+aucol
+
+##
+
+
+ggplot(aucol, aes(.fitted, .resid)) +
+  geom_point()+
+  geom_hline(yintercept = 0) +
+  geom_smooth(se = FALSE)
+#> `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+ggplot(aucol, aes(sample= .std.resid))+
+  stat_qq()+
+  geom_abline()
+
+ggplot(aucol, aes(.fitted, sqrt(abs(.std.resid))))+
+  geom_point()+
+  geom_smooth(se = FALSE)
+#> `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+ggplot(aucol, aes(.hat, .std.resid)) +
+  geom_vline(size = 2, colour = "white", xintercept = 0) +
+  geom_hline(size = 2, colour = "white", yintercept = 0) +
+  geom_point() + geom_smooth(se = FALSE)
+#> `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+
+#Ahora para todos los modelos
+by_country %>%
+  mutate(agmnt = map2( model,data,augment))
+
+by_country %>%
+  mutate(agmnt = map2( model,data,augment)) %>% 
+  unnest(agmnt) %>% 
+  select(-c(data,model,resids))
 
 #El que tiene el coeficiente mpás grande es Omán, que tiene un cambio mayor en 
 #la expectativa de vida
