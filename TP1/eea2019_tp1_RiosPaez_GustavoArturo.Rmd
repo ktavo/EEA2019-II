@@ -48,7 +48,7 @@ Se empieza a filtrar la BD por:
 
 
 ```{r}
-ar_properties %>% filter(INDICE>101 | GRUPO == "Privado_Registrado")
+#ar_properties %>% filter(INDICE>101 | GRUPO == "Privado_Registrado")
 
 ```
 
