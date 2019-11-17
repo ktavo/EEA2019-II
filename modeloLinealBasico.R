@@ -77,11 +77,93 @@ measure_distance <- function(mod, data)
   sumaDiffs <- data %>% 
     summarise(sumaDiffs = sum(diff))
   sumaDiffs <- sumaDiffs/length(data$x)
-  sumaDiffs <- sqrt(sumaDiffs)
+  sumaDiffs <-  as.numeric(sqrt(sumaDiffs))
 }
 distance <- measure_distance(c(7, 1.5), sim1)
 distance
 #extendedData <- measure_distance(c(7, 1.5), sim1)
+
+
+
+#Ahora vamos a evaluar los modelos aleatorios
+sim1_dist <- function(a1, a2) {
+  measure_distance(c(a1, a2), sim1)
+}
+
+models <- models %>% 
+  mutate(dist = purrr::map2_dbl(a1, a2, sim1_dist))
+models
+
+#Superponemos los 10 mejores modelos
+
+ggplot(sim1, aes(x, y)) + 
+  geom_point(size = 2, colour = "grey30") + 
+  geom_abline(
+    aes(intercept = a1, slope = a2, colour = -dist), 
+    data = filter(models, rank(dist) <= 10)
+  )
+
+#Vemos los modelos como gráficos de dispersión
+
+ggplot(models, aes(a1, a2)) +
+  geom_point(data = filter(models, rank(dist) <= 10), size = 4, colour = "red") +
+  geom_point(aes(colour = -dist))
+
+
+
+#Grid Search
+# Crear la grilla
+grid <- expand.grid(
+  a1 = seq(-5, 20, length = 25),
+  a2 = seq(1, 3, length = 25)
+) %>% 
+  # Calcular la distancia
+  mutate(dist = purrr::map2_dbl(a1, a2, sim1_dist))
+
+#Generamos la grilla para evaluar los modelos
+
+grid %>% 
+  ggplot(aes(a1, a2)) +
+  geom_point(data = filter(grid, rank(dist) <= 10), size = 4, colour = "red") +
+  geom_point(aes(colour = -dist)) 
+
+#Vemos los mejores 10 modelos
+ggplot(sim1, aes(x, y)) + 
+  geom_point(size = 2, colour = "grey30") + 
+  geom_abline(
+    aes(intercept = a1, slope = a2, colour = -dist), 
+    data = filter(grid, rank(dist) <= 10))
+
+
+#Superficie del ECM
+#Podemos ver los puntos de la grilla en tres dimensiones
+
+# Matriz para el grafico
+rss_matrix <- matrix(models[["dist"]],nrow = length(models$a1),ncol = length(models$a1), byrow = TRUE)
+
+# Grafico usando plotly
+rss_graph = plot_ly(x=models$a1, y=models$a2, z=rss_matrix) %>% add_surface(contours = list(
+  z = list(
+    show=TRUE,
+    usecolormap=TRUE,
+    highlightcolor="#ff0000",
+    project=list(z=TRUE)
+  )
+), reversescale=TRUE)  %>%
+  layout(
+    title = "Superficie del ECM",
+    scene = list(
+      xaxis = list(title = "a0"),
+      yaxis = list(title = "a1"),
+      zaxis = list(title = "RSS")
+    ))
+
+rss_graph
+
+
+
+
+
 
 
 
