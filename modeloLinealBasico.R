@@ -178,6 +178,48 @@ ggplot(sim1, aes(x, y)) +
   geom_point(size = 2, colour = "grey30") + 
   geom_abline(intercept = best$par[1], slope = best$par[2])
 
+#Óptimo para el modelo lineal
+#Al óptimo para el modelo lineal lo podemos resolver matemáticamente
+sim1_mod <- lm(y ~ x, data = sim1)
+coef(sim1_mod)
+
+#Predicciones
+#Iniciamos generando una cuadrilla
+grid <- sim1 %>% 
+  data_grid(x) 
+grid
+
+grid <- grid %>% 
+  add_predictions(sim1_mod) 
+grid
+
+#Agregamos las predicciones al dataset original
+ggplot(sim1, aes(x)) +
+  geom_point(aes(y = y)) +
+  geom_line(aes(y = pred), data = grid, colour = "red", size = 1)
+
+#Residuos del modelo
+#Para los residuos necesitamos los valores reales
+
+sim1 <- sim1 %>% 
+  add_residuals(sim1_mod)
+sim1
+
+#Con un polígono de frecuencia podemos graficar la dispersión de los residuos
+
+ggplot(sim1, aes(resid)) + 
+  geom_freqpoly(binwidth = 0.5)
+
+#El promedio de los residuos debería ser muy cercano a 0
+mean(sim1$resid)
+
+#Los residuos también se pueden graficar del siguiente modo
+
+ggplot(sim1, aes(x, resid)) + 
+  geom_ref_line(h = 0, size = 2,colour = "firebrick") +
+  geom_point() 
+
+#Esperamos que los residuos NO tengan estructura!
 
 
 
