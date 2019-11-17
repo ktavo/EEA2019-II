@@ -161,6 +161,26 @@ rss_graph = plot_ly(x=models$a1, y=models$a2, z=rss_matrix) %>% add_surface(cont
 rss_graph
 
 
+#Clase 2
+#Óptimo por métodos numéricos
+#Por métodos numéricos se puede optimizar, La intuición de estas dos herramientas
+#es bastante simple: Se elige un punto de partida y se busca la pendiente más inclinada
+#Búsqueda Newton-Raphson.
+#Gradient Descent
+
+#Usamos optim
+optim(c(4,2), measure_distance, data = sim1)
+best <- optim(c(0, 0), measure_distance, data = sim1)
+best$par
+
+#Se grafica basado en el mejor punto encontrado
+ggplot(sim1, aes(x, y)) + 
+  geom_point(size = 2, colour = "grey30") + 
+  geom_abline(intercept = best$par[1], slope = best$par[2])
+
+
+
+
 
 
 
