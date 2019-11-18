@@ -2,7 +2,7 @@
 
 ##Ejercicios regresión lineal simple##
 
-#install.packages('tidymodels', dependencies=TRUE, repos='http://cran.rstudio.com/')
+#install.packages('robustbase', dependencies=TRUE, repos='http://cran.rstudio.com/')
 
 rm(list=ls())
 gc()
@@ -17,6 +17,8 @@ library(ggridges)
 library(ggthemes)
 library(magrittr)
 library(tidymodels)
+library(robust)
+
 
 
 #Compararemos el ajuste lineal clásico (mínimos cuadrados) con el método
@@ -51,14 +53,31 @@ df %>%
   facet_wrap(~var, scales = "free")+
   theme(legend.position = "none")
 
+#Esta segunda grfica nos muestra 10 datos con un comportamiento patológico
+df %>% 
+  ggplot(.,aes(y=y))+
+  geom_point(aes(x3))+
+  geom_abline(slope = -2,intercept = 4, color="green")+
+  geom_abline(slope = -60,intercept = 4, color = "firebrick")
 
 
+#Ajuste de modelo lineal
+#Modelo clásico
+modelo <- lm(y~x1+x2+x3,data = df)
+summary(modelo)
 
+tidy(modelo,conf.int = TRUE,conf.level = 0.95)
+glance(modelo)
 
+au <- augment(modelo,df)
 
+#Modelo robusto
+modelo_robusto <- lmRob(y~x1+x2+x3,data = df)
+summary(modelo_robusto)
 
-
-
+tidy(modelo_robusto)
+glance(modelo_robusto)
+au_rob <- augment(modelo_robusto,df)
 
 
 
