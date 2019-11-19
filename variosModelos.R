@@ -301,8 +301,7 @@ by_country %>%
   unnest(agmnt) %>% 
   select(-c(data,model,resids))
 
-#El que tiene el coeficiente mpás grande es Omán, que tiene un cambio mayor en 
-#la expectativa de vida
+
 
 
 
