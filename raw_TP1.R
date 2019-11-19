@@ -119,10 +119,44 @@ corrplot(crm, method="color", col=col(200),
 #Contra la hipótesis inicial no se observa una correlaciónmarcada entre la superficie cubierta y el precio
 #Se observauna correlaciónentre el precio y el número de baños y cuartos
 
+#3.Preparacion de los datos (II) 
+#a.En el punto 2 deberian haber encontrado que la variable bedrooms presenta una alta 
+#proporción de valores faltantes y que presenta una fuerte correlacion con la variable rooms. 
+#Por lo tanto, vamos a eliminarla.
+#Nota: surface_total y surface_covered también están estrechamente correlacionadas
+ar_properties_filtrado <- ar_properties_filtrado %>% select(-bedrooms)
 
-#Basados en la correlación entre bedrooms y rooms eliminaremos la variable bedrooms
+#b.Eliminar todos los registros que presentan valores faltantes
+#Para esto usaremos la función drop_na de tidyr
+library(tidyr)
+ar_properties_filtrado <- ar_properties_filtrado %>% drop_na()
 
-#ar_properties_filtrado <- ar_properties_filtrado %>% select(-bedrooms)
+#4.Analisis exploratorios (II) 
+#a.Obtener estadisticas descriptivas para la variable precio (cuartiles, promedio, minimo y maximo) y 
+#realizar un histograma de la variable
+summaryPrecio <- summary(as.numeric(as.character(ar_properties_filtrado$price)))
+summaryPrecio
+
+
+####*********************************+
+priceHistogram <- qplot(as.numeric(as.character(ar_properties_filtrado$price)),
+                        geom="histogram",
+                        main = "Histograma de precios",
+                        xlab = "Precio",
+                        bins = 500) 
+priceHistogram
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
