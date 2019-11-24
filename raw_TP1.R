@@ -182,28 +182,42 @@ ggallyData$surface_covered <- as.numeric(as.character(ggallyData$surface_covered
 ggallyData$property_type <- as.factor(as.character(ggallyData$property_type))
 
 levels(ggallyData$property_type)
-
 #Departamento 17598 -414
 #PH 1831 -414
 #Casa 712 -414
-
-ggallyData$property_type <- as.factor(ggallyData$property_type)
-levels(ggallyData$property_type)
-
-#ggallyData <- apply(ggallyData %>% select(-c(property_type)),2,as.integer)
-
 ggpairs(ggallyData,  mapping = aes(color = (ggallyData$property_type)))
 
 
 #5.Outliers
 #a.Eliminar los outliers de la variable precio con algún criterio que elijan.
-interqDistance <- summaryPrecioPorTipo$Casa[5] - summaryPrecioPorTipo$Casa[3]
-filter <- (interqDistance*4) + summaryPrecioPorTipo$Casa[5]
+#Los mayores outliers de precio los encontramos en "Casa" y en "Departamento".
+#Son outliers superiores en ambos casos, con lo que considero que lo más apropiado sería excluir 
+#los valores que superen 3 distancias inter-cuartil sobre el 3 cuartil. 
+summaryPrecioPorTipo
+#Si usamos Casa para calcular las distnacias intercuartil
+interqDistance <- as.numeric(summaryPrecioPorTipo$Casa[5] - summaryPrecioPorTipo$Casa[3])
+interqDistance
+#Si usamos Departamento para calcular las distnacias intercuartil
+interqDistance <- as.numeric(summaryPrecioPorTipo$Departamento[5] - summaryPrecioPorTipo$Departamento[3])
+interqDistance
+#Usaremos Departamento, dado que el volumen de datos es muhco mayor para propiedades de este tipo.
+#Se realizaron experimentos también usando casa, pero el filtro no era tan efectivo como se esperaba.
+
+filter <- as.numeric((interqDistance*3) + summaryPrecioPorTipo$Departamento[5])
 filter
 
+ggallyDataNoOutliers <- ggallyData %>% filter(ggallyData$price <= filter)
+#Con esto filtramo un outlier de superficie para un PH que dificulta ver las gráficas
+ggallyDataNoOutliers <- ggallyDataNoOutliers %>% filter(ggallyDataNoOutliers$surface_covered < 11000)
+summary(ggallyDataNoOutliers)
 
-  
-  
+ggpairs(ggallyDataNoOutliers,  mapping = aes(color = (ggallyDataNoOutliers$property_type)))
+#El filtro aplicado permite mucha más claridad en los boxplot de precio, además de mayor claridad
+#en los gráficos de rooms y de bathrooms, puesto que excluye valores de ouliers extremos que allí se tenían.
+
+
+
+
 
 
 
