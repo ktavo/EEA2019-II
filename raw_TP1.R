@@ -159,10 +159,7 @@ summaryPrecioPorTipo <- summaryPrecioPorTipo[c("PH","Departamento","Casa")]
 summaryPrecioPorTipo
 
 #c.Realizar un grafico de boxplot de la variable precio por tipo de propiedad
-
-
 ar_properties_filtrado$price <- as.numeric(as.character(ar_properties_filtrado$price)) 
-
 ggplot(ar_properties_filtrado, mapping = aes(x = property_type, y = price,
                                    group = property_type, fill = property_type )) +
                                    geom_boxplot()
@@ -211,16 +208,36 @@ ggallyDataNoOutliers <- ggallyData %>% filter(ggallyData$price <= filter)
 ggallyDataNoOutliers <- ggallyDataNoOutliers %>% filter(ggallyDataNoOutliers$surface_covered < 11000)
 summary(ggallyDataNoOutliers)
 
-ggpairs(ggallyDataNoOutliers,  mapping = aes(color = (ggallyDataNoOutliers$property_type)))
 #El filtro aplicado permite mucha más claridad en los boxplot de precio, además de mayor claridad
 #en los gráficos de rooms y de bathrooms, puesto que excluye valores de ouliers extremos que allí se tenían.
 
+#Analisis exploratorios (III) 
+#a.Obtener estadisticas descriptivas para la variable precio (cuartiles, promedio, minimo y maximo) y realizar un histograma de la variable
+summaryPrecioFiltrado <- summary(as.numeric(as.character(ggallyDataNoOutliers$price)))
+summaryPrecioFiltrado
 
+####*********************************+
+priceHistogramFiltrado <- qplot(as.numeric(as.character(ggallyDataNoOutliers$price)),
+                        geom="histogram",
+                        main = "Histograma de precios",
+                        xlab = "Precio",
+                        bins = 500) 
+priceHistogramFiltrado
+#b.Obtener estadisticas descriptivas para la variable precio (cuartiles, promedio, minimo y maximo) por cada tipo de propiedad.
+summaryPrecioPorTipoFiltrado <- summary(as.numeric(as.character(ggallyDataNoOutliers$price)))
+summaryPrecioPorTipoFiltrado <- tapply(as.numeric(as.character(ggallyDataNoOutliers$price)),
+                                       ggallyDataNoOutliers$property_type, summary)
+summaryPrecioPorTipoFiltrado <- summaryPrecioPorTipoFiltrado[c("PH","Departamento","Casa")]
+summaryPrecioPorTipoFiltrado
+#c.Realizar un grafico de boxplot de la variable precio por tipo de propiedad
+ggallyDataNoOutliers$price <- as.numeric(as.character(ggallyDataNoOutliers$price)) 
+ggplot(ggallyDataNoOutliers, mapping = aes(x = property_type, y = price,
+                                         group = property_type, fill = property_type )) +
+                                         geom_boxplot()
+#d.Realizar un correlagrama usando GGAlly
+ggpairs(ggallyDataNoOutliers,  mapping = aes(color = (ggallyDataNoOutliers$property_type)))
 
-
-
-
-
+#Comentar análisis exploratorio
 
 
 
