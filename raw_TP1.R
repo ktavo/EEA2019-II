@@ -145,14 +145,65 @@ priceHistogram <- qplot(as.numeric(as.character(ar_properties_filtrado$price)),
                         xlab = "Precio",
                         bins = 500) 
 priceHistogram
+#Como vemos el histograma se ve algo distorsionado por los valores extremos que tiene 
+#la variable price
+
+#b.Obtener estadisticas descriptivas para la variable precio
+#(cuartiles, promedio, minimo y maximo) por cada tipo de propiedad.
+
+summaryPrecioPorTipo <- summary(as.numeric(as.character(ar_properties_filtrado$price)))
+
+summaryPrecioPorTipo <- tapply(as.numeric(as.character(ar_properties_filtrado$price)),
+                              ar_properties_filtrado$property_type, summary)
+summaryPrecioPorTipo <- summaryPrecioPorTipo[c("PH","Departamento","Casa")]
+summaryPrecioPorTipo
+
+#c.Realizar un grafico de boxplot de la variable precio por tipo de propiedad
+
+
+ar_properties_filtrado$price <- as.numeric(as.character(ar_properties_filtrado$price)) 
+
+ggplot(ar_properties_filtrado, mapping = aes(x = property_type, y = price,
+                                   group = property_type, fill = property_type )) +
+                                   geom_boxplot()
+#Una vez más los outliers no nos permiten ver muy bien la comparación entre los boxplots
+
+#d.Realizar un correlagrama usando GGally
+library(GGally)
+ggallyData <- ar_properties_filtrado %>% select(rooms, bathrooms, surface_total,
+                                                surface_covered, price, property_type)
 
 
 
+ggallyData$rooms <- as.numeric(as.character(ggallyData$rooms))
+ggallyData$bathrooms <- as.numeric(as.character(ggallyData$bathrooms))
+ggallyData$surface_total <- as.numeric(as.character(ggallyData$surface_total))
+ggallyData$surface_covered <- as.numeric(as.character(ggallyData$surface_covered))
+ggallyData$property_type <- as.factor(as.character(ggallyData$property_type))
+
+levels(ggallyData$property_type)
+
+#Departamento 17598 -414
+#PH 1831 -414
+#Casa 712 -414
+
+ggallyData$property_type <- as.factor(ggallyData$property_type)
+levels(ggallyData$property_type)
+
+#ggallyData <- apply(ggallyData %>% select(-c(property_type)),2,as.integer)
+
+ggpairs(ggallyData,  mapping = aes(color = (ggallyData$property_type)))
 
 
+#5.Outliers
+#a.Eliminar los outliers de la variable precio con algún criterio que elijan.
+interqDistance <- summaryPrecioPorTipo$Casa[5] - summaryPrecioPorTipo$Casa[3]
+filter <- (interqDistance*4) + summaryPrecioPorTipo$Casa[5]
+filter
 
 
-
+  
+  
 
 
 
