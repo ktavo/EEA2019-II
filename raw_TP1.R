@@ -216,6 +216,10 @@ summary(ggallyDataNoOutliers)
 summaryPrecioFiltrado <- summary(as.numeric(as.character(ggallyDataNoOutliers$price)))
 summaryPrecioFiltrado
 
+#El nuevo valormáxmo es $ 550.000es mucho menor que el valor que se tenía antes, sin embargo
+#es el resultado de expcluir los outliers extremos
+
+
 ####*********************************+
 priceHistogramFiltrado <- qplot(as.numeric(as.character(ggallyDataNoOutliers$price)),
                         geom="histogram",
@@ -223,21 +227,46 @@ priceHistogramFiltrado <- qplot(as.numeric(as.character(ggallyDataNoOutliers$pri
                         xlab = "Precio",
                         bins = 500) 
 priceHistogramFiltrado
+#El histograma de precios es más claro ahora,se mantiene eso si, siendo una distribucion con cola 
+#a la derecha
+
 #b.Obtener estadisticas descriptivas para la variable precio (cuartiles, promedio, minimo y maximo) por cada tipo de propiedad.
 summaryPrecioPorTipoFiltrado <- summary(as.numeric(as.character(ggallyDataNoOutliers$price)))
 summaryPrecioPorTipoFiltrado <- tapply(as.numeric(as.character(ggallyDataNoOutliers$price)),
                                        ggallyDataNoOutliers$property_type, summary)
 summaryPrecioPorTipoFiltrado <- summaryPrecioPorTipoFiltrado[c("PH","Departamento","Casa")]
 summaryPrecioPorTipoFiltrado
+
+#La media más alta sigue estando para los casos de las casas. Los PH y los Departamentos tienen
+#medias muy similares
+
 #c.Realizar un grafico de boxplot de la variable precio por tipo de propiedad
 ggallyDataNoOutliers$price <- as.numeric(as.character(ggallyDataNoOutliers$price)) 
 ggplot(ggallyDataNoOutliers, mapping = aes(x = property_type, y = price,
                                          group = property_type, fill = property_type )) +
                                          geom_boxplot()
+#EL boxplot refleja valores superiores en general para el caso de las casas (puede darse debido a 
+#su tamañoen metros cuadrados y a su mayor cantidad de ambientes)
 #d.Realizar un correlagrama usando GGAlly
 ggpairs(ggallyDataNoOutliers,  mapping = aes(color = (ggallyDataNoOutliers$property_type)))
+#El correlograma nos muestra menos correlación enrte las variables precio y cantidad de baños, 
+#curiosamente no se ve una correlacion entre la superficie y el precio, vemos el precio mas 
+#relacionado con la cantidad de baños y con la cantidad de habitaciones
 
-#Comentar análisis exploratorio
+#7.Modelo lineal
+
+#a. Realizar un modelo lineal simple para explicar el precio en función de las habitaciones (rooms) y otro modelo que explique el precio en función de la superficie total (surface_total)
+#b. Usar la función summary() para obtener informacion de ambos modelos. Explicar los valores de los coeficientes estimados.
+#c. ¿Cuál modelo usarían para predecir el precio? ¿Por qué?
+  
+
+
+
+
+
+
+
+
 
 
 
