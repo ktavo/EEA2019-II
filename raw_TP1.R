@@ -44,7 +44,6 @@ ar_properties_filtrado <- ar_properties_filtrado %>%
 glimpse(ar_properties_filtrado)
 
 
-
 ###2.Analisis exploratorios (I)
 #a.Obtener la cantidad de valores unicos y de valores faltantes (NAs) para cada una de estas variables
 #Para esto usaremos la función 'unique'
@@ -255,10 +254,53 @@ ggpairs(ggallyDataNoOutliers,  mapping = aes(color = (ggallyDataNoOutliers$prope
 
 #7.Modelo lineal
 
-#a. Realizar un modelo lineal simple para explicar el precio en función de las habitaciones (rooms) y otro modelo que explique el precio en función de la superficie total (surface_total)
+#a. Realizar un modelo lineal simple para explicar el precio en función de las habitaciones (rooms)
+#y otro modelo que explique el precio en función de la superficie total (surface_total)
+library(modelr)
+library(broom)
+
+#Iniciamos con el modelo para las habitaciones
+modeloRooms <- lm(rooms ~ price, data = ggallyDataNoOutliers)
+ggallyDataNoOutliers %>% 
+  add_predictions(modeloRooms) %>%
+  ggplot(aes(price, pred)) + 
+  geom_line() + 
+  ggtitle(expression(beta[0] + beta[1]*x))
+glance(modeloRooms)
+
+ggallyDataNoOutliers %>% 
+  add_residuals(modeloRooms) %>% 
+  ggplot(aes(price, resid)) + 
+  geom_hline(yintercept = 0, colour = "white", size = 3) + 
+  geom_line() + 
+  ggtitle(expression(+ epsilon))
+#Los residuos no siguen un patrón definido que es lo que estábamos esperando
+
+#Ahora hacemos el modelo a partir de la superficie total
+modeloSurface <- lm(surface_total ~ price, data = ggallyDataNoOutliers)
+ggallyDataNoOutliers %>% 
+  add_predictions(modeloSurface) %>%
+  ggplot(aes(price, pred)) + 
+  geom_line() + 
+  ggtitle(expression(beta[0] + beta[1]*x))
+glance(modeloSurface)
+
+ggallyDataNoOutliers %>% 
+  add_residuals(modeloSurface) %>% 
+  ggplot(aes(price, resid)) + 
+  geom_hline(yintercept = 0, colour = "white", size = 3) + 
+  geom_line() + 
+  ggtitle(expression(+ epsilon))
+
+
 #b. Usar la función summary() para obtener informacion de ambos modelos. Explicar los valores de los coeficientes estimados.
+summary(modeloRooms)
+summary(modeloSurface)
+
 #c. ¿Cuál modelo usarían para predecir el precio? ¿Por qué?
-  
+#Respecto a los resultados de la función Sumary preferiría quedarme con el modelo por 
+#habitaciones, tiene un R-Square mucho más alto que el modelo de superficie, y un error estandrd
+#muchísimo menor.
 
 
 

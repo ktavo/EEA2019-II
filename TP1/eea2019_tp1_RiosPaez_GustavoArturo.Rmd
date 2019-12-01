@@ -3,78 +3,402 @@ title: "eea2019_tp1_RiosPaez_GustavoArturo"
 output: html_notebook
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
-
-
 TP1 EEA
+#Añadiendo las librerías necesarias
 
 ```{r}
 rm(list=ls())
-#Añadiendo las librerías necesarias
-
+library("dplyr")
+library("tidyverse")
 ```
 
-1.Preparacion de los datos (I)
-Leer el archivo ar_properties.csv y mostrar su estructura
-
+#1.Preparacion de los datos (I) 
+#a.Leer el archivo ar_properties.csv y mostrar su estructura
 Leyendo el archivo usando read.table
 Luego usando Glipse para dar un vistazo a la DB
 t0, t1 y tcorridaCSV serán usados para medir el tiempo de lectura del archivo
+
 ```{r}
 t0       <-  Sys.time()
-ar_properties <- read.table("ar_properties.csv",
-                              sep=",",
-                              dec=".",
-                              header = TRUE,
-                              fill = TRUE)
+ar_properties <- read.table("TP1/ar_properties.csv",
+                            sep=",",
+                            dec=".",
+                            header = TRUE,
+                            fill = TRUE)
 t1       <-  Sys.time()
 tcorridaCSV <-  as.numeric( t1 - t0, units = "secs")
 glimpse(ar_properties)
 ```
 
-Vemos que los nombres de algunas variables son poco dicientes, por lo tanto modiicamos los nombres de esta acorde a lo que vemos en sus contenidos
-```{r}
-ar_properties <- ar_properties %>% rename("País" = "l1")
-ar_properties <- ar_properties %>% rename("Departamento" = "l2")
-ar_properties <- ar_properties %>% rename("Ciudad" = "l3")
-ar_properties <- ar_properties %>% rename("Barrio" = "l4")
+#b.Quedarse con aquellos registros que:
+#  i.Pertenecen a Argentina y Capital Federal
+#  ii.Cuyo precio esta en dolares (USD)
+#  iii.El tipo de propiedad sea: Departamento, PH o Casa
+#  iv.El tipo de operacion sea Venta
+#Revisé la variable Currency para ver si todas estaban marcadas por USD para dolaers
+#Revisé los NA en country l1
+#Deperatamento 42041
+#PH 4564
+#Casa 21535
+#Sólo por el filtro de "Capital Federal" tenemos 47577
 
+```{r}
+ar_properties_filtrado <- ar_properties %>% filter(l1 == "Argentina", l2 == "Capital Federal",
+                                                   currency == "USD" ,
+                                                   property_type %in% c("Casa","PH", "Departamento"),
+                                                   operation_type == "Venta")
+
+glimpse(ar_properties_filtrado)
+```
+
+#c.Seleccionar las variables id, l3, rooms, bedrooms, bathrooms, surface_total, surface_covered, price y property_type
+
+```{r}
+ar_properties_filtrado <- ar_properties_filtrado %>% 
+  select(id, l3, rooms, bedrooms, bathrooms, surface_total, surface_covered, price, property_type)
+glimpse(ar_properties_filtrado)
+```
+
+#2.Analisis exploratorios (I)
+#a.Obtener la cantidad de valores unicos y de valores faltantes (NAs) para cada una de estas variables
+#Para esto usaremos la función 'unique'
+
+```{r}
+unique(ar_properties_filtrado)
+#Pero con apply la podemos aplicar a todo el dataFrame sin duplicar código
+uniqueValues <- apply(ar_properties_filtrado,2,unique)
+#Tenemos como resultado:
+uniqueValues$l3
+#l3 -57 Barrios entontrados y NA
+uniqueValues$rooms
+#rooms 17 categorías (y NA) sin embargo se tienen valores que no tienen mucho sentido
+#Algunos de ellos parecieran ser excesivos
+uniqueValues$bedrooms
+#bedrooms 17 categorías (y NA) se tiene un outlier de 130 que debería ser un error de tipeo
+#dado que en rooms no tenemos ningún outlier que se le acerque
+uniqueValues$bathrooms
+#bathrooms 12 categorías (y NA) los valores más grandes son llamativos
+uniqueValues$surface_total
+uniqueValues$surface_covered
+
+#surface_total y surface_covered alta variabilidad, dado que es una variable numérica, 
+#se podría transformar en categórica revisando más a fondo los valores
+summary(as.integer(uniqueValues$surface_total))
+summary(as.integer(uniqueValues$surface_covered))
+#Price
+uniqueValues$price
+#price alta variabilidad, dado que es una variable numérica, 
+#se podría transformar en categórica revisando más a fondo los valores
+summary(as.integer(uniqueValues$price))
+#Tipo de propiedad
+uniqueValues$property_type
+#Las tres gategorías filtradas del dataset: PH, Casa, Departamento
+```
+
+#surface_total y surface_covered alta variabilidad, dado que es una variable numérica, 
+#se podría transformar en categórica revisando más a fondo los valores
+summary(as.integer(uniqueValues$surface_total))
+summary(as.integer(uniqueValues$surface_covered))
+#Price
+uniqueValues$price
+#price alta variabilidad, dado que es una variable numérica, 
+#se podría transformar en categórica revisando más a fondo los valores
+summary(as.integer(uniqueValues$price))
+#Tipo de propiedad
+uniqueValues$property_type
+#Las tres gategorías filtradas del dataset: PH, Casa, Departamento
+
+#a.Obtener la cantidad de valores unicos y de valores faltantes (NAs) para cada una de estas variables
+#Ahora vamos a totalizar los valores faltantes por columnap para esto usamos la función apply para sumar
+#sobre los resultados de la misma función para listar los is.na por columna #inceptionTime
+
+```{r}
+apply(apply(ar_properties_filtrado,2,is.na),2,sum)
+```
+
+#b.Obtener la matriz de correlacion para las variables numericas. 
+#Para las correlaciones usaremos la librería corrr
+
+```{r}
+library(tidyverse)
+library(corrr)
+library(corrplot)
+```
+
+#Separaremos las variables numéricas
+
+```{r}
+numeric_variables <-  ar_properties_filtrado %>% 
+  select(rooms, bedrooms, bathrooms, surface_total, surface_covered, price)
+glimpse(numeric_variables)
+```
+
+#Transformamos las variables categóricas en numéricas
+
+```{r}
+number <- as.numeric(as.character(numeric_variables$rooms))
+numeric_variables <- apply(apply(numeric_variables,2,as.character), 2, as.numeric)
+crm <- cor(numeric_variables, use="complete.obs", method="pearson") 
+```
+
+#Generámos la matriz de corelaciones
+
+```{r}
+library(RColorBrewer)
+library(corrplot)
+n <- ncol(crm)
+p.mat<- matrix(NA, n, n)
+col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
+corrplot(crm, method="color", col=col(200),  
+         type="upper", order="hclust", 
+         addCoef.col = "black", # Add coefficient of correlation
+         tl.col="black", tl.srt=45, #Text label color and rotation
+         # Combine with significance
+         p.mat = p.mat, sig.level = 0.01, insig = "blank", 
+         # hide correlation coefficient on the principal diagonal
+         diag=FALSE 
+)
+```
+
+#Encontramos que:
+#Todas las correlaciones entre las varialbes son positivas.
+#Contra la hipótesis inicial no se observa una correlaciónmarcada entre la superficie cubierta y el precio
+#Se observauna correlaciónentre el precio y el número de baños y cuartos
+
+#3.Preparacion de los datos (II) 
+#a.En el punto 2 deberian haber encontrado que la variable bedrooms presenta una alta 
+#proporción de valores faltantes y que presenta una fuerte correlacion con la variable rooms. 
+#Por lo tanto, vamos a eliminarla.
+#Nota: surface_total y surface_covered también están estrechamente correlacionadas
+
+```{r}
+ar_properties_filtrado <- ar_properties_filtrado %>% select(-bedrooms)
 ```
 
 
-Se empieza a filtrar la BD por:
-
-
-```{r}
-#ar_properties %>% filter(INDICE>101 | GRUPO == "Privado_Registrado")
-
-```
-
-Quedarse con aquellos registros que:
-Pertenecen a Argentina y Capital Federal
-Cuyo precio esta en dolares (USD)
-El tipo de propiedad sea: Departamento, PH o Casa
-El tipo de operacion sea Venta
-    
-Seleccionar las variables id, l3, rooms, bedrooms, bathrooms, surface_total, surface_covered, price y property_type
-
-Deberian llegar a un dataset con 61905 observaciones y 9 variables
-
-
+#b.Eliminar todos los registros que presentan valores faltantes
+#Para esto usaremos la función drop_na de tidyr
 
 ```{r}
-
-t0       <-  Sys.time()
-individual_t117 <- read.table("../CodigoProf/Fuentes/usu_individual_t117.txt",
-                              sep=";",
-                              dec=",",
-                              header = TRUE,
-                              fill = TRUE)
-t1       <-  Sys.time()
-tcorridaTXT <-  as.numeric( t1 - t0, units = "secs")
+library(tidyr)
+ar_properties_filtrado <- ar_properties_filtrado %>% drop_na()
 ```
+
+#4.Analisis exploratorios (II) 
+#a.Obtener estadisticas descriptivas para la variable precio (cuartiles, promedio, minimo y maximo) y 
+#realizar un histograma de la variable
+
+```{r}
+summaryPrecio <- summary(as.numeric(as.character(ar_properties_filtrado$price)))
+summaryPrecio
+priceHistogram <- qplot(as.numeric(as.character(ar_properties_filtrado$price)),
+                        geom="histogram",
+                        main = "Histograma de precios",
+                        xlab = "Precio",
+                        bins = 500) 
+priceHistogram
+```
+
+#Como vemos el histograma se ve algo distorsionado por los valores extremos que tiene 
+#la variable price
+
+#b.Obtener estadisticas descriptivas para la variable precio
+#(cuartiles, promedio, minimo y maximo) por cada tipo de propiedad.
+
+```{r}
+summaryPrecioPorTipo <- summary(as.numeric(as.character(ar_properties_filtrado$price)))
+summaryPrecioPorTipo <- tapply(as.numeric(as.character(ar_properties_filtrado$price)),
+                              ar_properties_filtrado$property_type, summary)
+summaryPrecioPorTipo <- summaryPrecioPorTipo[c("PH","Departamento","Casa")]
+summaryPrecioPorTipo
+```
+
+#c.Realizar un grafico de boxplot de la variable precio por tipo de propiedad
+
+```{r}
+ar_properties_filtrado$price <- as.numeric(as.character(ar_properties_filtrado$price)) 
+ggplot(ar_properties_filtrado, mapping = aes(x = property_type, y = price,
+                                   group = property_type, fill = property_type )) +
+                                   geom_boxplot()
+```
+
+#Una vez más los outliers no nos permiten ver muy bien la comparación entre los boxplots
+
+#d.Realizar un correlagrama usando GGally
+
+```{r}
+library(GGally)
+ggallyData <- ar_properties_filtrado %>% select(rooms, bathrooms, surface_total,
+                                                surface_covered, price, property_type)
+ggallyData$rooms <- as.numeric(as.character(ggallyData$rooms))
+ggallyData$bathrooms <- as.numeric(as.character(ggallyData$bathrooms))
+ggallyData$surface_total <- as.numeric(as.character(ggallyData$surface_total))
+ggallyData$surface_covered <- as.numeric(as.character(ggallyData$surface_covered))
+ggallyData$property_type <- as.factor(as.character(ggallyData$property_type))
+levels(ggallyData$property_type)
+```
+
+#Departamento 17598 -414
+#PH 1831 -414
+#Casa 712 -414
+
+```{r}
+ggpairs(ggallyData,  mapping = aes(color = (ggallyData$property_type)))
+```
+
+#5.Outliers
+#a.Eliminar los outliers de la variable precio con algún criterio que elijan.
+#Los mayores outliers de precio los encontramos en "Casa" y en "Departamento".
+#Son outliers superiores en ambos casos, con lo que considero que lo más apropiado sería excluir 
+#los valores que superen 3 distancias inter-cuartil sobre el 3 cuartil. 
+
+```{r}
+summaryPrecioPorTipo
+#Si usamos Casa para calcular las distnacias intercuartil
+interqDistance <- as.numeric(summaryPrecioPorTipo$Casa[5] - summaryPrecioPorTipo$Casa[3])
+interqDistance
+#Si usamos Departamento para calcular las distnacias intercuartil
+interqDistance <- as.numeric(summaryPrecioPorTipo$Departamento[5] - summaryPrecioPorTipo$Departamento[3])
+interqDistance
+```
+
+#Usaremos Departamento, dado que el volumen de datos es muhco mayor para propiedades de este tipo.
+#Se realizaron experimentos también usando casa, pero el filtro no era tan efectivo como se esperaba.
+
+```{r}
+filter <- as.numeric((interqDistance*3) + summaryPrecioPorTipo$Departamento[5])
+filter
+ggallyDataNoOutliers <- ggallyData %>% filter(ggallyData$price <= filter)
+```
+
+#Con esto filtramos un outlier de superficie para un PH que dificulta ver las gráficas
+
+```{r}
+ggallyDataNoOutliers <- ggallyDataNoOutliers %>% filter(ggallyDataNoOutliers$surface_covered < 11000)
+summary(ggallyDataNoOutliers)
+```
+
+#El filtro aplicado permite mucha más claridad en los boxplot de precio, además de mayor claridad
+#en los gráficos de rooms y de bathrooms, puesto que excluye valores de ouliers extremos que allí se tenían.
+
+#Analisis exploratorios (III) 
+#a.Obtener estadisticas descriptivas para la variable precio (cuartiles, promedio, minimo y maximo) y realizar un histograma de la variable
+
+```{r}
+summaryPrecioFiltrado <- summary(as.numeric(as.character(ggallyDataNoOutliers$price)))
+summaryPrecioFiltrado
+```
+
+#El nuevo valormáxmo es $ 550.000es mucho menor que el valor que se tenía antes, sin embargo
+#es el resultado de expcluir los outliers extremos
+
+```{r}
+priceHistogramFiltrado <- qplot(as.numeric(as.character(ggallyDataNoOutliers$price)),
+                        geom="histogram",
+                        main = "Histograma de precios",
+                        xlab = "Precio",
+                        bins = 500) 
+priceHistogramFiltrado
+```
+
+#El histograma de precios es más claro ahora,se mantiene eso si, siendo una distribucion con cola 
+#a la derecha
+
+#b.Obtener estadisticas descriptivas para la variable precio (cuartiles, promedio, minimo y maximo) por cada tipo de propiedad.
+
+```{r}
+summaryPrecioPorTipoFiltrado <- summary(as.numeric(as.character(ggallyDataNoOutliers$price)))
+summaryPrecioPorTipoFiltrado <- tapply(as.numeric(as.character(ggallyDataNoOutliers$price)),
+                                       ggallyDataNoOutliers$property_type, summary)
+summaryPrecioPorTipoFiltrado <- summaryPrecioPorTipoFiltrado[c("PH","Departamento","Casa")]
+summaryPrecioPorTipoFiltrado
+```
+
+#La media más alta sigue estando para los casos de las casas. Los PH y los Departamentos tienen
+#medias muy similares
+#c.Realizar un grafico de boxplot de la variable precio por tipo de propiedad
+
+```{r}
+ggallyDataNoOutliers$price <- as.numeric(as.character(ggallyDataNoOutliers$price)) 
+ggplot(ggallyDataNoOutliers, mapping = aes(x = property_type, y = price,
+                                         group = property_type, fill = property_type )) +
+                                         geom_boxplot()
+```
+
+
+#EL boxplot refleja valores superiores en general para el caso de las casas (puede darse debido a 
+#su tamañoen metros cuadrados y a su mayor cantidad de ambientes)
+#d.Realizar un correlagrama usando GGAlly
+
+```{r}
+ggpairs(ggallyDataNoOutliers,  mapping = aes(color = (ggallyDataNoOutliers$property_type)))
+```
+
+#El correlograma nos muestra menos correlación enrte las variables precio y cantidad de baños, 
+#curiosamente no se ve una correlacion entre la superficie y el precio, vemos el precio mas 
+#relacionado con la cantidad de baños y con la cantidad de habitaciones
+
+#7.Modelo lineal
+#a. Realizar un modelo lineal simple para explicar el precio en función de las habitaciones (rooms)
+#y otro modelo que explique el precio en función de la superficie total (surface_total)
+
+```{r}
+#Añadimos las librerías necesarias:
+library(modelr)
+library(broom)
+```
+
+#Iniciamos con el modelo para las habitaciones
+
+```{r}
+modeloRooms <- lm(rooms ~ price, data = ggallyDataNoOutliers)
+ggallyDataNoOutliers %>% 
+  add_predictions(modeloRooms) %>%
+  ggplot(aes(price, pred)) + 
+  geom_line() + 
+  ggtitle(expression(beta[0] + beta[1]*x))
+glance(modeloRooms)
+
+ggallyDataNoOutliers %>% 
+  add_residuals(modeloRooms) %>% 
+  ggplot(aes(price, resid)) + 
+  geom_hline(yintercept = 0, colour = "white", size = 3) + 
+  geom_line() + 
+  ggtitle(expression(+ epsilon))
+```
+
+#Los residuos no siguen un patrón definido que es lo que estábamos esperando
+#Ahora hacemos el modelo a partir de la superficie total
+
+```{r}
+modeloSurface <- lm(surface_total ~ price, data = ggallyDataNoOutliers)
+ggallyDataNoOutliers %>% 
+  add_predictions(modeloSurface) %>%
+  ggplot(aes(price, pred)) + 
+  geom_line() + 
+  ggtitle(expression(beta[0] + beta[1]*x))
+glance(modeloSurface)
+
+ggallyDataNoOutliers %>% 
+  add_residuals(modeloSurface) %>% 
+  ggplot(aes(price, resid)) + 
+  geom_hline(yintercept = 0, colour = "white", size = 3) + 
+  geom_line() + 
+  ggtitle(expression(+ epsilon))
+```
+
+#b. Usar la función summary() para obtener informacion de ambos modelos. Explicar los valores de los coeficientes estimados.
+
+```{r}
+summary(modeloRooms)
+summary(modeloSurface)
+```
+
+#c. ¿Cuál modelo usarían para predecir el precio? ¿Por qué?
+#Respecto a los resultados de la función Sumary preferiría quedarme con el modelo por 
+#habitaciones, tiene un R-Square mucho más alto que el modelo de superficie, y un error estandrd
+#muchísimo menor.
+***********************************************************************************************
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 

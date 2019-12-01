@@ -1749,106 +1749,390 @@ summary {
 
 
 <!-- rnb-text-begin -->
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> Notebook. When you execute code within the notebook, the results appear beneath the code.</p>
-<p>Try executing this chunk by clicking the <em>Run</em> button within the chunk or by placing your cursor inside it and pressing <em>Ctrl+Shift+Enter</em>.</p>
-<p>TP1 EEA</p>
+<p>TP1 EEA #Añadiendo las librerías necesarias</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm0obGlzdD1scygpKVxubGlicmFyeShcImRwbHlyXCIpXG5saWJyYXJ5KFwidGlkeXZlcnNlXCIpXG5gYGAifQ== -->
+<pre class="r"><code>rm(list=ls())
+library(&quot;dplyr&quot;)
+library(&quot;tidyverse&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>1.Preparacion de los datos (I) Leer el archivo ar_properties.csv y mostrar su estructura</p>
-<p>Leyendo el archivo usando read.table Luego usando Glipse para dar un vistazo a la DB t0, t1 y tcorridaCSV serán usados para medir el tiempo de lectura del archivo</p>
+<p>#1.Preparacion de los datos (I) #a.Leer el archivo ar_properties.csv y mostrar su estructura Leyendo el archivo usando read.table Luego usando Glipse para dar un vistazo a la DB t0, t1 y tcorridaCSV serán usados para medir el tiempo de lectura del archivo</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG50MCAgICAgICA8LSAgU3lzLnRpbWUoKVxuYXJfcHJvcGVydGllcyA8LSByZWFkLnRhYmxlKFwiYXJfcHJvcGVydGllcy5jc3ZcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNlcD1cIixcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlYz1cIi5cIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGhlYWRlciA9IFRSVUUsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICBmaWxsID0gVFJVRSlcblxuYGBgIn0= -->
-<pre class="r"><code>
-t0       &lt;-  Sys.time()
-ar_properties &lt;- read.table(&quot;ar_properties.csv&quot;,
-                              sep=&quot;,&quot;,
-                              dec=&quot;.&quot;,
-                              header = TRUE,
-                              fill = TRUE)
-</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRU9GIHdpdGhpbiBxdW90ZWQgc3RyaW5nXG4ifQ== -->
-<pre><code>EOF within quoted string</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudDEgICAgICAgPC0gIFN5cy50aW1lKClcbnRjb3JyaWRhQ1NWIDwtICBhcy5udW1lcmljKCB0MSAtIHQwLCB1bml0cyA9IFwic2Vjc1wiKVxuZ2xpbXBzZShhcl9wcm9wZXJ0aWVzKVxuYGBgIn0= -->
-<pre class="r"><code>t1       &lt;-  Sys.time()
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudDAgICAgICAgPC0gIFN5cy50aW1lKClcbmFyX3Byb3BlcnRpZXMgPC0gcmVhZC50YWJsZShcIlRQMS9hcl9wcm9wZXJ0aWVzLmNzdlwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNlcD1cIixcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZWM9XCIuXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgaGVhZGVyID0gVFJVRSxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBmaWxsID0gVFJVRSlcbnQxICAgICAgIDwtICBTeXMudGltZSgpXG50Y29ycmlkYUNTViA8LSAgYXMubnVtZXJpYyggdDEgLSB0MCwgdW5pdHMgPSBcInNlY3NcIilcbmdsaW1wc2UoYXJfcHJvcGVydGllcylcbmBgYCJ9 -->
+<pre class="r"><code>t0       &lt;-  Sys.time()
+ar_properties &lt;- read.table(&quot;TP1/ar_properties.csv&quot;,
+                            sep=&quot;,&quot;,
+                            dec=&quot;.&quot;,
+                            header = TRUE,
+                            fill = TRUE)
+t1       &lt;-  Sys.time()
 tcorridaCSV &lt;-  as.numeric( t1 - t0, units = &quot;secs&quot;)
 glimpse(ar_properties)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiT2JzZXJ2YXRpb25zOiAxNDMsODUyXG5WYXJpYWJsZXM6IDI0XG4kIGlkICAgICAgICAgICAgICBcdTAwMWJbM21cdTAwMWJbMzg7NTsyNDZtPGZjdD5cdTAwMWJbMzltXHUwMDFiWzIzbSBTMHdlM3ozVjJKcEhVSnJlcVEydC93PT0sIGtNeGNtQVM4TnZyeW5HQlZiTU9FYVE9PSwgQ2Uzb2pGK1pUT2tCOGQuLi5cbiQgYWRfdHlwZSAgICAgICAgIFx1MDAxYlszbVx1MDAxYlszODs1OzI0Nm08ZmN0Plx1MDAxYlszOW1cdTAwMWJbMjNtIFByb3BpZWRhZCwgUHJvcGllZGFkLCBQcm9waWVkYWQsIFByb3BpZWRhZCwgUHJvcGllZGFkLCBQcm9waWVkYWQsIC4uLlxuJCBzdGFydF9kYXRlICAgICAgXHUwMDFiWzNtXHUwMDFiWzM4OzU7MjQ2bTxmY3Q+XHUwMDFiWzM5bVx1MDAxYlsyM20gMjAxOS0wNC0xNCwgMjAxOS0wNC0xNCwgMjAxOS0wNC0xNCwgMjAxOS0wNC0xNCwgMjAxOS0wNC0xNCwgMjAxOS0wLi4uXG4kIGVuZF9kYXRlICAgICAgICBcdTAwMWJbM21cdTAwMWJbMzg7NTsyNDZtPGZjdD5cdTAwMWJbMzltXHUwMDFiWzIzbSAyMDE5LTA2LTE0LCAyMDE5LTA0LTE2LCA5OTk5LTEyLTMxLCA5OTk5LTEyLTMxLCAyMDE5LTA3LTA5LCAyMDE5LTAuLi5cbiQgY3JlYXRlZF9vbiAgICAgIFx1MDAxYlszbVx1MDAxYlszODs1OzI0Nm08ZmN0Plx1MDAxYlszOW1cdTAwMWJbMjNtIDIwMTktMDQtMTQsIDIwMTktMDQtMTQsIDIwMTktMDQtMTQsIDIwMTktMDQtMTQsIDIwMTktMDQtMTQsIDIwMTktMC4uLlxuJCBsYXQgICAgICAgICAgICAgXHUwMDFiWzNtXHUwMDFiWzM4OzU7MjQ2bTxmY3Q+XHUwMDFiWzM5bVx1MDAxYlsyM20gLTM0Ljk0MzMxMTgyMDgsIC0zNC42MzE4MSwgTkEsIC0zNC42NTQ3MDUwNSwgLTM0LjY1NDk0OTE5LCAtMzIuOTM1Li4uXG4kIGxvbiAgICAgICAgICAgICBcdTAwMWJbM21cdTAwMWJbMzg7NTsyNDZtPGZjdD5cdTAwMWJbMzltXHUwMDFiWzIzbSAtNTQuOTI5NjU1NzU4NiwgLTU4LjQyMDU5OSwgTkEsIC01OC43OTA4OTM1NSwgLTU4Ljc4NzExNywgLTYwLjY4MzkuLi5cbiQgbDEgICAgICAgICAgICAgIFx1MDAxYlszbVx1MDAxYlszODs1OzI0Nm08ZmN0Plx1MDAxYlszOW1cdTAwMWJbMjNtIFVydWd1YXksIEFyZ2VudGluYSwgQXJnZW50aW5hLCBBcmdlbnRpbmEsIEFyZ2VudGluYSwgQXJnZW50aW5hLCBBci4uLlxuJCBsMiAgICAgICAgICAgICAgXHUwMDFiWzNtXHUwMDFiWzM4OzU7MjQ2bTxmY3Q+XHUwMDFiWzM5bVx1MDAxYlsyM20gTWFsZG9uYWRvLCBDYXBpdGFsIEZlZGVyYWwsIEJzLkFzLiBHLkIuQS4gWm9uYSBOb3J0ZSwgQnMuQXMuIEcuQi5BLi4uXG4kIGwzICAgICAgICAgICAgICBcdTAwMWJbM21cdTAwMWJbMzg7NTsyNDZtPGZjdD5cdTAwMWJbMzltXHUwMDFiWzIzbSBQdW50YSBkZWwgRXN0ZSwgQm9lZG8sIE5BLCBNb3Jlbm8sIE1vcmVubywgUm9zYXJpbywgSXR1emFpbmfDg8KzLCBKby4uLlxuJCBsNCAgICAgICAgICAgICAgXHUwMDFiWzNtXHUwMDFiWzM4OzU7MjQ2bTxmY3Q+XHUwMDFiWzM5bVx1MDAxYlsyM20gTkEsIE5BLCBOQSwgTW9yZW5vLCBNb3Jlbm8sIE5BLCBJdHV6YWluZ8ODwrMsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEuLi5cbiQgbDUgICAgICAgICAgICAgIFx1MDAxYlszbVx1MDAxYlszODs1OzI0Nm08ZmN0Plx1MDAxYlszOW1cdTAwMWJbMjNtIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQS4uLlxuJCBsNiAgICAgICAgICAgICAgXHUwMDFiWzNtXHUwMDFiWzM4OzU7MjQ2bTxmY3Q+XHUwMDFiWzM5bVx1MDAxYlsyM20gTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLi4uXG4kIHJvb21zICAgICAgICAgICBcdTAwMWJbM21cdTAwMWJbMzg7NTsyNDZtPGZjdD5cdTAwMWJbMzltXHUwMDFiWzIzbSAyLCBOQSwgMiwgMiwgMiwgNCwgTkEsIDYsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCAuLi5cbiQgYmVkcm9vbXMgICAgICAgIFx1MDAxYlszbVx1MDAxYlszODs1OzI0Nm08ZmN0Plx1MDAxYlszOW1cdTAwMWJbMjNtIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQS4uLlxuJCBiYXRocm9vbXMgICAgICAgXHUwMDFiWzNtXHUwMDFiWzM4OzU7MjQ2bTxmY3Q+XHUwMDFiWzM5bVx1MDAxYlsyM20gMSwgTkEsIDEsIDIsIDMsIDEsIDMsIDMsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCAxLi4uXG4kIHN1cmZhY2VfdG90YWwgICBcdTAwMWJbM21cdTAwMWJbMzg7NTsyNDZtPGZjdD5cdTAwMWJbMzltXHUwMDFiWzIzbSA0NSwgTkEsIDIwMCwgNDYwLCA2NjAsIE5BLCA3MCwgTkEsIDEzMDAsIDQwNSwgMzUyLCAzNzMsIDM2MCwgMTMyNSwuLi5cbiQgc3VyZmFjZV9jb3ZlcmVkIFx1MDAxYlszbVx1MDAxYlszODs1OzI0Nm08ZmN0Plx1MDAxYlszOW1cdTAwMWJbMjNtIDQwLCBOQSwgTkEsIDEwMCwgMTQ4LCA4OSwgMTIyLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCAyLCBOQSwgTkEsIC4uLlxuJCBwcmljZSAgICAgICAgICAgXHUwMDFiWzNtXHUwMDFiWzM4OzU7MjQ2bTxmY3Q+XHUwMDFiWzM5bVx1MDAxYlsyM20gMTMwMDAsIDAsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIDAsIE5BLCAwLCBOQSwgTkEsIE5BLCBOQSwgTkEsIDAsLi4uXG4kIGN1cnJlbmN5ICAgICAgICBcdTAwMWJbM21cdTAwMWJbMzg7NTsyNDZtPGZjdD5cdTAwMWJbMzltXHUwMDFiWzIzbSBVWVUsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE5BLCBOQSwgTkEsIE4uLi5cbiQgcHJpY2VfcGVyaW9kICAgIFx1MDAxYlszbVx1MDAxYlszODs1OzI0Nm08ZmN0Plx1MDAxYlszOW1cdTAwMWJbMjNtIE1lbnN1YWwsIE1lbnN1YWwsIE5BLCBNZW5zdWFsLCBNZW5zdWFsLCBNZW5zdWFsLCBNZW5zdWFsLCBNZW5zdWFsLC4uLlxuJCB0aXRsZSAgICAgICAgICAgXHUwMDFiWzNtXHUwMDFiWzM4OzU7MjQ2bTxmY3Q+XHUwMDFiWzM5bVx1MDAxYlsyM20gRGVwYXJ0YW1lbnRvIC0gUm9vc2V2ZWx0LCBQSCAtIEJvZWRvLCBJdHV6YWluZ28gIDExMDAgLSAkIDEgLSBDYXNhLi4uXG4kIHByb3BlcnR5X3R5cGUgICBcdTAwMWJbM21cdTAwMWJbMzg7NTsyNDZtPGZjdD5cdTAwMWJbMzltXHUwMDFiWzIzbSBEZXBhcnRhbWVudG8sIFBILCBDYXNhLCBDYXNhLCBDYXNhLCBDYXNhLCBDYXNhLCBDYXNhLCBMb3RlLCBMb3RlLCAuLi5cbiQgb3BlcmF0aW9uX3R5cGUgIFx1MDAxYlszbVx1MDAxYlszODs1OzI0Nm08ZmN0Plx1MDAxYlszOW1cdTAwMWJbMjNtIEFscXVpbGVyLCBWZW50YSwgQWxxdWlsZXIsIFZlbnRhLCBWZW50YSwgVmVudGEsIFZlbnRhLCBBbHF1aWxlciwgVi4uLlxuIn0= -->
-<pre><code>Observations: 143,852
-Variables: 24
-$ id              [3m[38;5;246m&lt;fct&gt;[39m[23m S0we3z3V2JpHUJreqQ2t/w==, kMxcmAS8NvrynGBVbMOEaQ==, Ce3ojF+ZTOkB8d...
-$ ad_type         [3m[38;5;246m&lt;fct&gt;[39m[23m Propiedad, Propiedad, Propiedad, Propiedad, Propiedad, Propiedad, ...
-$ start_date      [3m[38;5;246m&lt;fct&gt;[39m[23m 2019-04-14, 2019-04-14, 2019-04-14, 2019-04-14, 2019-04-14, 2019-0...
-$ end_date        [3m[38;5;246m&lt;fct&gt;[39m[23m 2019-06-14, 2019-04-16, 9999-12-31, 9999-12-31, 2019-07-09, 2019-0...
-$ created_on      [3m[38;5;246m&lt;fct&gt;[39m[23m 2019-04-14, 2019-04-14, 2019-04-14, 2019-04-14, 2019-04-14, 2019-0...
-$ lat             [3m[38;5;246m&lt;fct&gt;[39m[23m -34.9433118208, -34.63181, NA, -34.65470505, -34.65494919, -32.935...
-$ lon             [3m[38;5;246m&lt;fct&gt;[39m[23m -54.9296557586, -58.420599, NA, -58.79089355, -58.787117, -60.6839...
-$ l1              [3m[38;5;246m&lt;fct&gt;[39m[23m Uruguay, Argentina, Argentina, Argentina, Argentina, Argentina, Ar...
-$ l2              [3m[38;5;246m&lt;fct&gt;[39m[23m Maldonado, Capital Federal, Bs.As. G.B.A. Zona Norte, Bs.As. G.B.A...
-$ l3              [3m[38;5;246m&lt;fct&gt;[39m[23m Punta del Este, Boedo, NA, Moreno, Moreno, Rosario, ItuzaingÃ³, Jo...
-$ l4              [3m[38;5;246m&lt;fct&gt;[39m[23m NA, NA, NA, Moreno, Moreno, NA, ItuzaingÃ³, NA, NA, NA, NA, NA, NA...
-$ l5              [3m[38;5;246m&lt;fct&gt;[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
-$ l6              [3m[38;5;246m&lt;fct&gt;[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
-$ rooms           [3m[38;5;246m&lt;fct&gt;[39m[23m 2, NA, 2, 2, 2, 4, NA, 6, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
-$ bedrooms        [3m[38;5;246m&lt;fct&gt;[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
-$ bathrooms       [3m[38;5;246m&lt;fct&gt;[39m[23m 1, NA, 1, 2, 3, 1, 3, 3, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1...
-$ surface_total   [3m[38;5;246m&lt;fct&gt;[39m[23m 45, NA, 200, 460, 660, NA, 70, NA, 1300, 405, 352, 373, 360, 1325,...
-$ surface_covered [3m[38;5;246m&lt;fct&gt;[39m[23m 40, NA, NA, 100, 148, 89, 122, NA, NA, NA, NA, NA, NA, 2, NA, NA, ...
-$ price           [3m[38;5;246m&lt;fct&gt;[39m[23m 13000, 0, NA, NA, NA, NA, NA, NA, 0, NA, 0, NA, NA, NA, NA, NA, 0,...
-$ currency        [3m[38;5;246m&lt;fct&gt;[39m[23m UYU, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N...
-$ price_period    [3m[38;5;246m&lt;fct&gt;[39m[23m Mensual, Mensual, NA, Mensual, Mensual, Mensual, Mensual, Mensual,...
-$ title           [3m[38;5;246m&lt;fct&gt;[39m[23m Departamento - Roosevelt, PH - Boedo, Ituzaingo  1100 - $ 1 - Casa...
-$ property_type   [3m[38;5;246m&lt;fct&gt;[39m[23m Departamento, PH, Casa, Casa, Casa, Casa, Casa, Casa, Lote, Lote, ...
-$ operation_type  [3m[38;5;246m&lt;fct&gt;[39m[23m Alquiler, Venta, Alquiler, Venta, Venta, Venta, Venta, Alquiler, V...</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Vemos que los nombres de algunas variables son poco dicientes, por lo tanto modiicamos los nombres de esta acorde a lo que vemos en sus contenidos</p>
+<p>#b.Quedarse con aquellos registros que: # i.Pertenecen a Argentina y Capital Federal # ii.Cuyo precio esta en dolares (USD) # iii.El tipo de propiedad sea: Departamento, PH o Casa # iv.El tipo de operacion sea Venta #Revisé la variable Currency para ver si todas estaban marcadas por USD para dolaers #Revisé los NA en country l1 #Deperatamento 42041 #PH 4564 #Casa 21535 #Sólo por el filtro de “Capital Federal” tenemos 47577</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXJfcHJvcGVydGllcyAlPiUgcmVuYW1lKFwiUGHDrXNcIiA9IDExKVxuYGBgIn0= -->
-<pre class="r"><code>ar_properties %&gt;% rename(&quot;País&quot; = 11)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXJfcHJvcGVydGllc19maWx0cmFkbyA8LSBhcl9wcm9wZXJ0aWVzICU+JSBmaWx0ZXIobDEgPT0gXCJBcmdlbnRpbmFcIiwgbDIgPT0gXCJDYXBpdGFsIEZlZGVyYWxcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGN1cnJlbmN5ID09IFwiVVNEXCIgLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcHJvcGVydHlfdHlwZSAlaW4lIGMoXCJDYXNhXCIsXCJQSFwiLCBcIkRlcGFydGFtZW50b1wiKSxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG9wZXJhdGlvbl90eXBlID09IFwiVmVudGFcIilcblxuZ2xpbXBzZShhcl9wcm9wZXJ0aWVzX2ZpbHRyYWRvKVxuYGBgIn0= -->
+<pre class="r"><code>ar_properties_filtrado &lt;- ar_properties %&gt;% filter(l1 == &quot;Argentina&quot;, l2 == &quot;Capital Federal&quot;,
+                                                   currency == &quot;USD&quot; ,
+                                                   property_type %in% c(&quot;Casa&quot;,&quot;PH&quot;, &quot;Departamento&quot;),
+                                                   operation_type == &quot;Venta&quot;)
+
+glimpse(ar_properties_filtrado)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Se empieza a filtrar la BD por:</p>
+<p>#c.Seleccionar las variables id, l3, rooms, bedrooms, bathrooms, surface_total, surface_covered, price y property_type</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXJfcHJvcGVydGllcyAlPiUgZmlsdGVyKElORElDRT4xMDEgfCBHUlVQTyA9PSBcIlByaXZhZG9fUmVnaXN0cmFkb1wiKVxuXG5gYGAifQ== -->
-<pre class="r"><code>ar_properties %&gt;% filter(INDICE&gt;101 | GRUPO == &quot;Privado_Registrado&quot;)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXJfcHJvcGVydGllc19maWx0cmFkbyA8LSBhcl9wcm9wZXJ0aWVzX2ZpbHRyYWRvICU+JSBcbiAgc2VsZWN0KGlkLCBsMywgcm9vbXMsIGJlZHJvb21zLCBiYXRocm9vbXMsIHN1cmZhY2VfdG90YWwsIHN1cmZhY2VfY292ZXJlZCwgcHJpY2UsIHByb3BlcnR5X3R5cGUpXG5nbGltcHNlKGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8pXG5gYGAifQ== -->
+<pre class="r"><code>ar_properties_filtrado &lt;- ar_properties_filtrado %&gt;% 
+  select(id, l3, rooms, bedrooms, bathrooms, surface_total, surface_covered, price, property_type)
+glimpse(ar_properties_filtrado)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Quedarse con aquellos registros que: Pertenecen a Argentina y Capital Federal Cuyo precio esta en dolares (USD) El tipo de propiedad sea: Departamento, PH o Casa El tipo de operacion sea Venta</p>
-<p>Seleccionar las variables id, l3, rooms, bedrooms, bathrooms, surface_total, surface_covered, price y property_type</p>
-<p>Deberian llegar a un dataset con 61905 observaciones y 9 variables</p>
+<p>#2.Analisis exploratorios (I) #a.Obtener la cantidad de valores unicos y de valores faltantes (NAs) para cada una de estas variables #Para esto usaremos la función ‘unique’</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG50MCAgICAgICA8LSAgU3lzLnRpbWUoKVxuaW5kaXZpZHVhbF90MTE3IDwtIHJlYWQudGFibGUoXCIuLi9Db2RpZ29Qcm9mL0Z1ZW50ZXMvdXN1X2luZGl2aWR1YWxfdDExNy50eHRcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNlcD1cIjtcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlYz1cIixcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGhlYWRlciA9IFRSVUUsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICBmaWxsID0gVFJVRSlcbnQxICAgICAgIDwtICBTeXMudGltZSgpXG50Y29ycmlkYVRYVCA8LSAgYXMubnVtZXJpYyggdDEgLSB0MCwgdW5pdHMgPSBcInNlY3NcIilcbmBgYCJ9 -->
-<pre class="r"><code>
-t0       &lt;-  Sys.time()
-individual_t117 &lt;- read.table(&quot;../CodigoProf/Fuentes/usu_individual_t117.txt&quot;,
-                              sep=&quot;;&quot;,
-                              dec=&quot;,&quot;,
-                              header = TRUE,
-                              fill = TRUE)
-t1       &lt;-  Sys.time()
-tcorridaTXT &lt;-  as.numeric( t1 - t0, units = &quot;secs&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudW5pcXVlKGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8pXG4jUGVybyBjb24gYXBwbHkgbGEgcG9kZW1vcyBhcGxpY2FyIGEgdG9kbyBlbCBkYXRhRnJhbWUgc2luIGR1cGxpY2FyIGPDs2RpZ29cbnVuaXF1ZVZhbHVlcyA8LSBhcHBseShhcl9wcm9wZXJ0aWVzX2ZpbHRyYWRvLDIsdW5pcXVlKVxuI1RlbmVtb3MgY29tbyByZXN1bHRhZG86XG51bmlxdWVWYWx1ZXMkbDNcbiNsMyAtNTcgQmFycmlvcyBlbnRvbnRyYWRvcyB5IE5BXG51bmlxdWVWYWx1ZXMkcm9vbXNcbiNyb29tcyAxNyBjYXRlZ29yw61hcyAoeSBOQSkgc2luIGVtYmFyZ28gc2UgdGllbmVuIHZhbG9yZXMgcXVlIG5vIHRpZW5lbiBtdWNobyBzZW50aWRvXG4jQWxndW5vcyBkZSBlbGxvcyBwYXJlY2llcmFuIHNlciBleGNlc2l2b3NcbnVuaXF1ZVZhbHVlcyRiZWRyb29tc1xuI2JlZHJvb21zIDE3IGNhdGVnb3LDrWFzICh5IE5BKSBzZSB0aWVuZSB1biBvdXRsaWVyIGRlIDEzMCBxdWUgZGViZXLDrWEgc2VyIHVuIGVycm9yIGRlIHRpcGVvXG4jZGFkbyBxdWUgZW4gcm9vbXMgbm8gdGVuZW1vcyBuaW5nw7puIG91dGxpZXIgcXVlIHNlIGxlIGFjZXJxdWVcbnVuaXF1ZVZhbHVlcyRiYXRocm9vbXNcbiNiYXRocm9vbXMgMTIgY2F0ZWdvcsOtYXMgKHkgTkEpIGxvcyB2YWxvcmVzIG3DoXMgZ3JhbmRlcyBzb24gbGxhbWF0aXZvc1xudW5pcXVlVmFsdWVzJHN1cmZhY2VfdG90YWxcbnVuaXF1ZVZhbHVlcyRzdXJmYWNlX2NvdmVyZWRcblxuI3N1cmZhY2VfdG90YWwgeSBzdXJmYWNlX2NvdmVyZWQgYWx0YSB2YXJpYWJpbGlkYWQsIGRhZG8gcXVlIGVzIHVuYSB2YXJpYWJsZSBudW3DqXJpY2EsIFxuI3NlIHBvZHLDrWEgdHJhbnNmb3JtYXIgZW4gY2F0ZWfDs3JpY2EgcmV2aXNhbmRvIG3DoXMgYSBmb25kbyBsb3MgdmFsb3Jlc1xuc3VtbWFyeShhcy5pbnRlZ2VyKHVuaXF1ZVZhbHVlcyRzdXJmYWNlX3RvdGFsKSlcbnN1bW1hcnkoYXMuaW50ZWdlcih1bmlxdWVWYWx1ZXMkc3VyZmFjZV9jb3ZlcmVkKSlcbiNQcmljZVxudW5pcXVlVmFsdWVzJHByaWNlXG4jcHJpY2UgYWx0YSB2YXJpYWJpbGlkYWQsIGRhZG8gcXVlIGVzIHVuYSB2YXJpYWJsZSBudW3DqXJpY2EsIFxuI3NlIHBvZHLDrWEgdHJhbnNmb3JtYXIgZW4gY2F0ZWfDs3JpY2EgcmV2aXNhbmRvIG3DoXMgYSBmb25kbyBsb3MgdmFsb3Jlc1xuc3VtbWFyeShhcy5pbnRlZ2VyKHVuaXF1ZVZhbHVlcyRwcmljZSkpXG4jVGlwbyBkZSBwcm9waWVkYWRcbnVuaXF1ZVZhbHVlcyRwcm9wZXJ0eV90eXBlXG4jTGFzIHRyZXMgZ2F0ZWdvcsOtYXMgZmlsdHJhZGFzIGRlbCBkYXRhc2V0OiBQSCwgQ2FzYSwgRGVwYXJ0YW1lbnRvXG5gYGAifQ== -->
+<pre class="r"><code>unique(ar_properties_filtrado)
+#Pero con apply la podemos aplicar a todo el dataFrame sin duplicar código
+uniqueValues &lt;- apply(ar_properties_filtrado,2,unique)
+#Tenemos como resultado:
+uniqueValues$l3
+#l3 -57 Barrios entontrados y NA
+uniqueValues$rooms
+#rooms 17 categorías (y NA) sin embargo se tienen valores que no tienen mucho sentido
+#Algunos de ellos parecieran ser excesivos
+uniqueValues$bedrooms
+#bedrooms 17 categorías (y NA) se tiene un outlier de 130 que debería ser un error de tipeo
+#dado que en rooms no tenemos ningún outlier que se le acerque
+uniqueValues$bathrooms
+#bathrooms 12 categorías (y NA) los valores más grandes son llamativos
+uniqueValues$surface_total
+uniqueValues$surface_covered
+
+#surface_total y surface_covered alta variabilidad, dado que es una variable numérica, 
+#se podría transformar en categórica revisando más a fondo los valores
+summary(as.integer(uniqueValues$surface_total))
+summary(as.integer(uniqueValues$surface_covered))
+#Price
+uniqueValues$price
+#price alta variabilidad, dado que es una variable numérica, 
+#se podría transformar en categórica revisando más a fondo los valores
+summary(as.integer(uniqueValues$price))
+#Tipo de propiedad
+uniqueValues$property_type
+#Las tres gategorías filtradas del dataset: PH, Casa, Departamento</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>#surface_total y surface_covered alta variabilidad, dado que es una variable numérica, #se podría transformar en categórica revisando más a fondo los valores summary(as.integer(uniqueValues<span class="math inline">\(surface_total)) summary(as.integer(uniqueValues\)</span>surface_covered)) #Price uniqueValues<span class="math inline">\(price #price alta variabilidad, dado que es una variable numérica, #se podría transformar en categórica revisando más a fondo los valores summary(as.integer(uniqueValues\)</span>price)) #Tipo de propiedad uniqueValues$property_type #Las tres gategorías filtradas del dataset: PH, Casa, Departamento</p>
+<p>#a.Obtener la cantidad de valores unicos y de valores faltantes (NAs) para cada una de estas variables #Ahora vamos a totalizar los valores faltantes por columnap para esto usamos la función apply para sumar #sobre los resultados de la misma función para listar los is.na por columna #inceptionTime</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXBwbHkoYXBwbHkoYXJfcHJvcGVydGllc19maWx0cmFkbywyLGlzLm5hKSwyLHN1bSlcbmBgYCJ9 -->
+<pre class="r"><code>apply(apply(ar_properties_filtrado,2,is.na),2,sum)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#b.Obtener la matriz de correlacion para las variables numericas. #Para las correlaciones usaremos la librería corrr</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KGNvcnJyKVxubGlicmFyeShjb3JycGxvdClcbmBgYCJ9 -->
+<pre class="r"><code>library(tidyverse)
+library(corrr)
+library(corrplot)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Separaremos las variables numéricas</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnVtZXJpY192YXJpYWJsZXMgPC0gIGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8gJT4lIFxuICBzZWxlY3Qocm9vbXMsIGJlZHJvb21zLCBiYXRocm9vbXMsIHN1cmZhY2VfdG90YWwsIHN1cmZhY2VfY292ZXJlZCwgcHJpY2UpXG5nbGltcHNlKG51bWVyaWNfdmFyaWFibGVzKVxuYGBgIn0= -->
+<pre class="r"><code>numeric_variables &lt;-  ar_properties_filtrado %&gt;% 
+  select(rooms, bedrooms, bathrooms, surface_total, surface_covered, price)
+glimpse(numeric_variables)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Transformamos las variables categóricas en numéricas</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnVtYmVyIDwtIGFzLm51bWVyaWMoYXMuY2hhcmFjdGVyKG51bWVyaWNfdmFyaWFibGVzJHJvb21zKSlcbm51bWVyaWNfdmFyaWFibGVzIDwtIGFwcGx5KGFwcGx5KG51bWVyaWNfdmFyaWFibGVzLDIsYXMuY2hhcmFjdGVyKSwgMiwgYXMubnVtZXJpYylcbmNybSA8LSBjb3IobnVtZXJpY192YXJpYWJsZXMsIHVzZT1cImNvbXBsZXRlLm9ic1wiLCBtZXRob2Q9XCJwZWFyc29uXCIpIFxuYGBgIn0= -->
+<pre class="r"><code>number &lt;- as.numeric(as.character(numeric_variables$rooms))
+numeric_variables &lt;- apply(apply(numeric_variables,2,as.character), 2, as.numeric)
+crm &lt;- cor(numeric_variables, use=&quot;complete.obs&quot;, method=&quot;pearson&quot;) </code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Generámos la matriz de corelaciones</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShSQ29sb3JCcmV3ZXIpXG5saWJyYXJ5KGNvcnJwbG90KVxubiA8LSBuY29sKGNybSlcbnAubWF0PC0gbWF0cml4KE5BLCBuLCBuKVxuY29sIDwtIGNvbG9yUmFtcFBhbGV0dGUoYyhcIiNCQjQ0NDRcIiwgXCIjRUU5OTg4XCIsIFwiI0ZGRkZGRlwiLCBcIiM3N0FBRERcIiwgXCIjNDQ3N0FBXCIpKVxuY29ycnBsb3QoY3JtLCBtZXRob2Q9XCJjb2xvclwiLCBjb2w9Y29sKDIwMCksICBcbiAgICAgICAgIHR5cGU9XCJ1cHBlclwiLCBvcmRlcj1cImhjbHVzdFwiLCBcbiAgICAgICAgIGFkZENvZWYuY29sID0gXCJibGFja1wiLCAjIEFkZCBjb2VmZmljaWVudCBvZiBjb3JyZWxhdGlvblxuICAgICAgICAgdGwuY29sPVwiYmxhY2tcIiwgdGwuc3J0PTQ1LCAjVGV4dCBsYWJlbCBjb2xvciBhbmQgcm90YXRpb25cbiAgICAgICAgICMgQ29tYmluZSB3aXRoIHNpZ25pZmljYW5jZVxuICAgICAgICAgcC5tYXQgPSBwLm1hdCwgc2lnLmxldmVsID0gMC4wMSwgaW5zaWcgPSBcImJsYW5rXCIsIFxuICAgICAgICAgIyBoaWRlIGNvcnJlbGF0aW9uIGNvZWZmaWNpZW50IG9uIHRoZSBwcmluY2lwYWwgZGlhZ29uYWxcbiAgICAgICAgIGRpYWc9RkFMU0UgXG4pXG5gYGAifQ== -->
+<pre class="r"><code>library(RColorBrewer)
+library(corrplot)
+n &lt;- ncol(crm)
+p.mat&lt;- matrix(NA, n, n)
+col &lt;- colorRampPalette(c(&quot;#BB4444&quot;, &quot;#EE9988&quot;, &quot;#FFFFFF&quot;, &quot;#77AADD&quot;, &quot;#4477AA&quot;))
+corrplot(crm, method=&quot;color&quot;, col=col(200),  
+         type=&quot;upper&quot;, order=&quot;hclust&quot;, 
+         addCoef.col = &quot;black&quot;, # Add coefficient of correlation
+         tl.col=&quot;black&quot;, tl.srt=45, #Text label color and rotation
+         # Combine with significance
+         p.mat = p.mat, sig.level = 0.01, insig = &quot;blank&quot;, 
+         # hide correlation coefficient on the principal diagonal
+         diag=FALSE 
+)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Encontramos que: #Todas las correlaciones entre las varialbes son positivas. #Contra la hipótesis inicial no se observa una correlaciónmarcada entre la superficie cubierta y el precio #Se observauna correlaciónentre el precio y el número de baños y cuartos</p>
+<p>#3.Preparacion de los datos (II) #a.En el punto 2 deberian haber encontrado que la variable bedrooms presenta una alta #proporción de valores faltantes y que presenta una fuerte correlacion con la variable rooms. #Por lo tanto, vamos a eliminarla. #Nota: surface_total y surface_covered también están estrechamente correlacionadas</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXJfcHJvcGVydGllc19maWx0cmFkbyA8LSBhcl9wcm9wZXJ0aWVzX2ZpbHRyYWRvICU+JSBzZWxlY3QoLWJlZHJvb21zKVxuYGBgIn0= -->
+<pre class="r"><code>ar_properties_filtrado &lt;- ar_properties_filtrado %&gt;% select(-bedrooms)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#b.Eliminar todos los registros que presentan valores faltantes #Para esto usaremos la función drop_na de tidyr</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5cilcbmFyX3Byb3BlcnRpZXNfZmlsdHJhZG8gPC0gYXJfcHJvcGVydGllc19maWx0cmFkbyAlPiUgZHJvcF9uYSgpXG5gYGAifQ== -->
+<pre class="r"><code>library(tidyr)
+ar_properties_filtrado &lt;- ar_properties_filtrado %&gt;% drop_na()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#4.Analisis exploratorios (II) #a.Obtener estadisticas descriptivas para la variable precio (cuartiles, promedio, minimo y maximo) y #realizar un histograma de la variable</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeVByZWNpbyA8LSBzdW1tYXJ5KGFzLm51bWVyaWMoYXMuY2hhcmFjdGVyKGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8kcHJpY2UpKSlcbnN1bW1hcnlQcmVjaW9cbnByaWNlSGlzdG9ncmFtIDwtIHFwbG90KGFzLm51bWVyaWMoYXMuY2hhcmFjdGVyKGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8kcHJpY2UpKSxcbiAgICAgICAgICAgICAgICAgICAgICAgIGdlb209XCJoaXN0b2dyYW1cIixcbiAgICAgICAgICAgICAgICAgICAgICAgIG1haW4gPSBcIkhpc3RvZ3JhbWEgZGUgcHJlY2lvc1wiLFxuICAgICAgICAgICAgICAgICAgICAgICAgeGxhYiA9IFwiUHJlY2lvXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICBiaW5zID0gNTAwKSBcbnByaWNlSGlzdG9ncmFtXG5gYGAifQ== -->
+<pre class="r"><code>summaryPrecio &lt;- summary(as.numeric(as.character(ar_properties_filtrado$price)))
+summaryPrecio
+priceHistogram &lt;- qplot(as.numeric(as.character(ar_properties_filtrado$price)),
+                        geom=&quot;histogram&quot;,
+                        main = &quot;Histograma de precios&quot;,
+                        xlab = &quot;Precio&quot;,
+                        bins = 500) 
+priceHistogram</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Como vemos el histograma se ve algo distorsionado por los valores extremos que tiene #la variable price</p>
+<p>#b.Obtener estadisticas descriptivas para la variable precio #(cuartiles, promedio, minimo y maximo) por cada tipo de propiedad.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeVByZWNpb1BvclRpcG8gPC0gc3VtbWFyeShhcy5udW1lcmljKGFzLmNoYXJhY3Rlcihhcl9wcm9wZXJ0aWVzX2ZpbHRyYWRvJHByaWNlKSkpXG5zdW1tYXJ5UHJlY2lvUG9yVGlwbyA8LSB0YXBwbHkoYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoYXJfcHJvcGVydGllc19maWx0cmFkbyRwcmljZSkpLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYXJfcHJvcGVydGllc19maWx0cmFkbyRwcm9wZXJ0eV90eXBlLCBzdW1tYXJ5KVxuc3VtbWFyeVByZWNpb1BvclRpcG8gPC0gc3VtbWFyeVByZWNpb1BvclRpcG9bYyhcIlBIXCIsXCJEZXBhcnRhbWVudG9cIixcIkNhc2FcIildXG5zdW1tYXJ5UHJlY2lvUG9yVGlwb1xuYGBgIn0= -->
+<pre class="r"><code>summaryPrecioPorTipo &lt;- summary(as.numeric(as.character(ar_properties_filtrado$price)))
+summaryPrecioPorTipo &lt;- tapply(as.numeric(as.character(ar_properties_filtrado$price)),
+                              ar_properties_filtrado$property_type, summary)
+summaryPrecioPorTipo &lt;- summaryPrecioPorTipo[c(&quot;PH&quot;,&quot;Departamento&quot;,&quot;Casa&quot;)]
+summaryPrecioPorTipo</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#c.Realizar un grafico de boxplot de la variable precio por tipo de propiedad</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXJfcHJvcGVydGllc19maWx0cmFkbyRwcmljZSA8LSBhcy5udW1lcmljKGFzLmNoYXJhY3Rlcihhcl9wcm9wZXJ0aWVzX2ZpbHRyYWRvJHByaWNlKSkgXG5nZ3Bsb3QoYXJfcHJvcGVydGllc19maWx0cmFkbywgbWFwcGluZyA9IGFlcyh4ID0gcHJvcGVydHlfdHlwZSwgeSA9IHByaWNlLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBncm91cCA9IHByb3BlcnR5X3R5cGUsIGZpbGwgPSBwcm9wZXJ0eV90eXBlICkpICtcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZ2VvbV9ib3hwbG90KClcbmBgYCJ9 -->
+<pre class="r"><code>ar_properties_filtrado$price &lt;- as.numeric(as.character(ar_properties_filtrado$price)) 
+ggplot(ar_properties_filtrado, mapping = aes(x = property_type, y = price,
+                                   group = property_type, fill = property_type )) +
+                                   geom_boxplot()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Una vez más los outliers no nos permiten ver muy bien la comparación entre los boxplots</p>
+<p>#d.Realizar un correlagrama usando GGally</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShHR2FsbHkpXG5nZ2FsbHlEYXRhIDwtIGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8gJT4lIHNlbGVjdChyb29tcywgYmF0aHJvb21zLCBzdXJmYWNlX3RvdGFsLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3VyZmFjZV9jb3ZlcmVkLCBwcmljZSwgcHJvcGVydHlfdHlwZSlcbmdnYWxseURhdGEkcm9vbXMgPC0gYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoZ2dhbGx5RGF0YSRyb29tcykpXG5nZ2FsbHlEYXRhJGJhdGhyb29tcyA8LSBhcy5udW1lcmljKGFzLmNoYXJhY3RlcihnZ2FsbHlEYXRhJGJhdGhyb29tcykpXG5nZ2FsbHlEYXRhJHN1cmZhY2VfdG90YWwgPC0gYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoZ2dhbGx5RGF0YSRzdXJmYWNlX3RvdGFsKSlcbmdnYWxseURhdGEkc3VyZmFjZV9jb3ZlcmVkIDwtIGFzLm51bWVyaWMoYXMuY2hhcmFjdGVyKGdnYWxseURhdGEkc3VyZmFjZV9jb3ZlcmVkKSlcbmdnYWxseURhdGEkcHJvcGVydHlfdHlwZSA8LSBhcy5mYWN0b3IoYXMuY2hhcmFjdGVyKGdnYWxseURhdGEkcHJvcGVydHlfdHlwZSkpXG5sZXZlbHMoZ2dhbGx5RGF0YSRwcm9wZXJ0eV90eXBlKVxuYGBgIn0= -->
+<pre class="r"><code>library(GGally)
+ggallyData &lt;- ar_properties_filtrado %&gt;% select(rooms, bathrooms, surface_total,
+                                                surface_covered, price, property_type)
+ggallyData$rooms &lt;- as.numeric(as.character(ggallyData$rooms))
+ggallyData$bathrooms &lt;- as.numeric(as.character(ggallyData$bathrooms))
+ggallyData$surface_total &lt;- as.numeric(as.character(ggallyData$surface_total))
+ggallyData$surface_covered &lt;- as.numeric(as.character(ggallyData$surface_covered))
+ggallyData$property_type &lt;- as.factor(as.character(ggallyData$property_type))
+levels(ggallyData$property_type)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Departamento 17598 -414 #PH 1831 -414 #Casa 712 -414</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwYWlycyhnZ2FsbHlEYXRhLCAgbWFwcGluZyA9IGFlcyhjb2xvciA9IChnZ2FsbHlEYXRhJHByb3BlcnR5X3R5cGUpKSlcbmBgYCJ9 -->
+<pre class="r"><code>ggpairs(ggallyData,  mapping = aes(color = (ggallyData$property_type)))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#5.Outliers #a.Eliminar los outliers de la variable precio con algún criterio que elijan. #Los mayores outliers de precio los encontramos en “Casa” y en “Departamento”. #Son outliers superiores en ambos casos, con lo que considero que lo más apropiado sería excluir #los valores que superen 3 distancias inter-cuartil sobre el 3 cuartil.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeVByZWNpb1BvclRpcG9cbiNTaSB1c2Ftb3MgQ2FzYSBwYXJhIGNhbGN1bGFyIGxhcyBkaXN0bmFjaWFzIGludGVyY3VhcnRpbFxuaW50ZXJxRGlzdGFuY2UgPC0gYXMubnVtZXJpYyhzdW1tYXJ5UHJlY2lvUG9yVGlwbyRDYXNhWzVdIC0gc3VtbWFyeVByZWNpb1BvclRpcG8kQ2FzYVszXSlcbmludGVycURpc3RhbmNlXG4jU2kgdXNhbW9zIERlcGFydGFtZW50byBwYXJhIGNhbGN1bGFyIGxhcyBkaXN0bmFjaWFzIGludGVyY3VhcnRpbFxuaW50ZXJxRGlzdGFuY2UgPC0gYXMubnVtZXJpYyhzdW1tYXJ5UHJlY2lvUG9yVGlwbyREZXBhcnRhbWVudG9bNV0gLSBzdW1tYXJ5UHJlY2lvUG9yVGlwbyREZXBhcnRhbWVudG9bM10pXG5pbnRlcnFEaXN0YW5jZVxuYGBgIn0= -->
+<pre class="r"><code>summaryPrecioPorTipo
+#Si usamos Casa para calcular las distnacias intercuartil
+interqDistance &lt;- as.numeric(summaryPrecioPorTipo$Casa[5] - summaryPrecioPorTipo$Casa[3])
+interqDistance
+#Si usamos Departamento para calcular las distnacias intercuartil
+interqDistance &lt;- as.numeric(summaryPrecioPorTipo$Departamento[5] - summaryPrecioPorTipo$Departamento[3])
+interqDistance</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Usaremos Departamento, dado que el volumen de datos es muhco mayor para propiedades de este tipo. #Se realizaron experimentos también usando casa, pero el filtro no era tan efectivo como se esperaba.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsdGVyIDwtIGFzLm51bWVyaWMoKGludGVycURpc3RhbmNlKjMpICsgc3VtbWFyeVByZWNpb1BvclRpcG8kRGVwYXJ0YW1lbnRvWzVdKVxuZmlsdGVyXG5nZ2FsbHlEYXRhTm9PdXRsaWVycyA8LSBnZ2FsbHlEYXRhICU+JSBmaWx0ZXIoZ2dhbGx5RGF0YSRwcmljZSA8PSBmaWx0ZXIpXG5gYGAifQ== -->
+<pre class="r"><code>filter &lt;- as.numeric((interqDistance*3) + summaryPrecioPorTipo$Departamento[5])
+filter
+ggallyDataNoOutliers &lt;- ggallyData %&gt;% filter(ggallyData$price &lt;= filter)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Con esto filtramos un outlier de superficie para un PH que dificulta ver las gráficas</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dhbGx5RGF0YU5vT3V0bGllcnMgPC0gZ2dhbGx5RGF0YU5vT3V0bGllcnMgJT4lIGZpbHRlcihnZ2FsbHlEYXRhTm9PdXRsaWVycyRzdXJmYWNlX2NvdmVyZWQgPCAxMTAwMClcbnN1bW1hcnkoZ2dhbGx5RGF0YU5vT3V0bGllcnMpXG5gYGAifQ== -->
+<pre class="r"><code>ggallyDataNoOutliers &lt;- ggallyDataNoOutliers %&gt;% filter(ggallyDataNoOutliers$surface_covered &lt; 11000)
+summary(ggallyDataNoOutliers)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#El filtro aplicado permite mucha más claridad en los boxplot de precio, además de mayor claridad #en los gráficos de rooms y de bathrooms, puesto que excluye valores de ouliers extremos que allí se tenían.</p>
+<p>#Analisis exploratorios (III) #a.Obtener estadisticas descriptivas para la variable precio (cuartiles, promedio, minimo y maximo) y realizar un histograma de la variable</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeVByZWNpb0ZpbHRyYWRvIDwtIHN1bW1hcnkoYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoZ2dhbGx5RGF0YU5vT3V0bGllcnMkcHJpY2UpKSlcbnN1bW1hcnlQcmVjaW9GaWx0cmFkb1xuYGBgIn0= -->
+<pre class="r"><code>summaryPrecioFiltrado &lt;- summary(as.numeric(as.character(ggallyDataNoOutliers$price)))
+summaryPrecioFiltrado</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#El nuevo valormáxmo es $ 550.000es mucho menor que el valor que se tenía antes, sin embargo #es el resultado de expcluir los outliers extremos</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpY2VIaXN0b2dyYW1GaWx0cmFkbyA8LSBxcGxvdChhcy5udW1lcmljKGFzLmNoYXJhY3RlcihnZ2FsbHlEYXRhTm9PdXRsaWVycyRwcmljZSkpLFxuICAgICAgICAgICAgICAgICAgICAgICAgZ2VvbT1cImhpc3RvZ3JhbVwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgbWFpbiA9IFwiSGlzdG9ncmFtYSBkZSBwcmVjaW9zXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICB4bGFiID0gXCJQcmVjaW9cIixcbiAgICAgICAgICAgICAgICAgICAgICAgIGJpbnMgPSA1MDApIFxucHJpY2VIaXN0b2dyYW1GaWx0cmFkb1xuYGBgIn0= -->
+<pre class="r"><code>priceHistogramFiltrado &lt;- qplot(as.numeric(as.character(ggallyDataNoOutliers$price)),
+                        geom=&quot;histogram&quot;,
+                        main = &quot;Histograma de precios&quot;,
+                        xlab = &quot;Precio&quot;,
+                        bins = 500) 
+priceHistogramFiltrado</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#El histograma de precios es más claro ahora,se mantiene eso si, siendo una distribucion con cola #a la derecha</p>
+<p>#b.Obtener estadisticas descriptivas para la variable precio (cuartiles, promedio, minimo y maximo) por cada tipo de propiedad.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeVByZWNpb1BvclRpcG9GaWx0cmFkbyA8LSBzdW1tYXJ5KGFzLm51bWVyaWMoYXMuY2hhcmFjdGVyKGdnYWxseURhdGFOb091dGxpZXJzJHByaWNlKSkpXG5zdW1tYXJ5UHJlY2lvUG9yVGlwb0ZpbHRyYWRvIDwtIHRhcHBseShhcy5udW1lcmljKGFzLmNoYXJhY3RlcihnZ2FsbHlEYXRhTm9PdXRsaWVycyRwcmljZSkpLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZ2dhbGx5RGF0YU5vT3V0bGllcnMkcHJvcGVydHlfdHlwZSwgc3VtbWFyeSlcbnN1bW1hcnlQcmVjaW9Qb3JUaXBvRmlsdHJhZG8gPC0gc3VtbWFyeVByZWNpb1BvclRpcG9GaWx0cmFkb1tjKFwiUEhcIixcIkRlcGFydGFtZW50b1wiLFwiQ2FzYVwiKV1cbnN1bW1hcnlQcmVjaW9Qb3JUaXBvRmlsdHJhZG9cbmBgYCJ9 -->
+<pre class="r"><code>summaryPrecioPorTipoFiltrado &lt;- summary(as.numeric(as.character(ggallyDataNoOutliers$price)))
+summaryPrecioPorTipoFiltrado &lt;- tapply(as.numeric(as.character(ggallyDataNoOutliers$price)),
+                                       ggallyDataNoOutliers$property_type, summary)
+summaryPrecioPorTipoFiltrado &lt;- summaryPrecioPorTipoFiltrado[c(&quot;PH&quot;,&quot;Departamento&quot;,&quot;Casa&quot;)]
+summaryPrecioPorTipoFiltrado</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#La media más alta sigue estando para los casos de las casas. Los PH y los Departamentos tienen #medias muy similares #c.Realizar un grafico de boxplot de la variable precio por tipo de propiedad</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dhbGx5RGF0YU5vT3V0bGllcnMkcHJpY2UgPC0gYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoZ2dhbGx5RGF0YU5vT3V0bGllcnMkcHJpY2UpKSBcbmdncGxvdChnZ2FsbHlEYXRhTm9PdXRsaWVycywgbWFwcGluZyA9IGFlcyh4ID0gcHJvcGVydHlfdHlwZSwgeSA9IHByaWNlLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBncm91cCA9IHByb3BlcnR5X3R5cGUsIGZpbGwgPSBwcm9wZXJ0eV90eXBlICkpICtcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZ2VvbV9ib3hwbG90KClcbmBgYCJ9 -->
+<pre class="r"><code>ggallyDataNoOutliers$price &lt;- as.numeric(as.character(ggallyDataNoOutliers$price)) 
+ggplot(ggallyDataNoOutliers, mapping = aes(x = property_type, y = price,
+                                         group = property_type, fill = property_type )) +
+                                         geom_boxplot()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#EL boxplot refleja valores superiores en general para el caso de las casas (puede darse debido a #su tamañoen metros cuadrados y a su mayor cantidad de ambientes) #d.Realizar un correlagrama usando GGAlly</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwYWlycyhnZ2FsbHlEYXRhTm9PdXRsaWVycywgIG1hcHBpbmcgPSBhZXMoY29sb3IgPSAoZ2dhbGx5RGF0YU5vT3V0bGllcnMkcHJvcGVydHlfdHlwZSkpKVxuYGBgIn0= -->
+<pre class="r"><code>ggpairs(ggallyDataNoOutliers,  mapping = aes(color = (ggallyDataNoOutliers$property_type)))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#El correlograma nos muestra menos correlación enrte las variables precio y cantidad de baños, #curiosamente no se ve una correlacion entre la superficie y el precio, vemos el precio mas #relacionado con la cantidad de baños y con la cantidad de habitaciones</p>
+<p>#7.Modelo lineal #a. Realizar un modelo lineal simple para explicar el precio en función de las habitaciones (rooms) #y otro modelo que explique el precio en función de la superficie total (surface_total)</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0HDsWFkaW1vcyBsYXMgbGlicmVyw61hcyBuZWNlc2FyaWFzOlxubGlicmFyeShtb2RlbHIpXG5saWJyYXJ5KGJyb29tKVxuYGBgIn0= -->
+<pre class="r"><code>#Añadimos las librerías necesarias:
+library(modelr)
+library(broom)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Iniciamos con el modelo para las habitaciones</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9kZWxvUm9vbXMgPC0gbG0ocm9vbXMgfiBwcmljZSwgZGF0YSA9IGdnYWxseURhdGFOb091dGxpZXJzKVxuZ2dhbGx5RGF0YU5vT3V0bGllcnMgJT4lIFxuICBhZGRfcHJlZGljdGlvbnMobW9kZWxvUm9vbXMpICU+JVxuICBnZ3Bsb3QoYWVzKHByaWNlLCBwcmVkKSkgKyBcbiAgZ2VvbV9saW5lKCkgKyBcbiAgZ2d0aXRsZShleHByZXNzaW9uKGJldGFbMF0gKyBiZXRhWzFdKngpKVxuZ2xhbmNlKG1vZGVsb1Jvb21zKVxuXG5nZ2FsbHlEYXRhTm9PdXRsaWVycyAlPiUgXG4gIGFkZF9yZXNpZHVhbHMobW9kZWxvUm9vbXMpICU+JSBcbiAgZ2dwbG90KGFlcyhwcmljZSwgcmVzaWQpKSArIFxuICBnZW9tX2hsaW5lKHlpbnRlcmNlcHQgPSAwLCBjb2xvdXIgPSBcIndoaXRlXCIsIHNpemUgPSAzKSArIFxuICBnZW9tX2xpbmUoKSArIFxuICBnZ3RpdGxlKGV4cHJlc3Npb24oKyBlcHNpbG9uKSlcbmBgYCJ9 -->
+<pre class="r"><code>modeloRooms &lt;- lm(rooms ~ price, data = ggallyDataNoOutliers)
+ggallyDataNoOutliers %&gt;% 
+  add_predictions(modeloRooms) %&gt;%
+  ggplot(aes(price, pred)) + 
+  geom_line() + 
+  ggtitle(expression(beta[0] + beta[1]*x))
+glance(modeloRooms)
+
+ggallyDataNoOutliers %&gt;% 
+  add_residuals(modeloRooms) %&gt;% 
+  ggplot(aes(price, resid)) + 
+  geom_hline(yintercept = 0, colour = &quot;white&quot;, size = 3) + 
+  geom_line() + 
+  ggtitle(expression(+ epsilon))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Los residuos no siguen un patrón definido que es lo que estábamos esperando #Ahora hacemos el modelo a partir de la superficie total</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9kZWxvU3VyZmFjZSA8LSBsbShzdXJmYWNlX3RvdGFsIH4gcHJpY2UsIGRhdGEgPSBnZ2FsbHlEYXRhTm9PdXRsaWVycylcbmdnYWxseURhdGFOb091dGxpZXJzICU+JSBcbiAgYWRkX3ByZWRpY3Rpb25zKG1vZGVsb1N1cmZhY2UpICU+JVxuICBnZ3Bsb3QoYWVzKHByaWNlLCBwcmVkKSkgKyBcbiAgZ2VvbV9saW5lKCkgKyBcbiAgZ2d0aXRsZShleHByZXNzaW9uKGJldGFbMF0gKyBiZXRhWzFdKngpKVxuZ2xhbmNlKG1vZGVsb1N1cmZhY2UpXG5cbmdnYWxseURhdGFOb091dGxpZXJzICU+JSBcbiAgYWRkX3Jlc2lkdWFscyhtb2RlbG9TdXJmYWNlKSAlPiUgXG4gIGdncGxvdChhZXMocHJpY2UsIHJlc2lkKSkgKyBcbiAgZ2VvbV9obGluZSh5aW50ZXJjZXB0ID0gMCwgY29sb3VyID0gXCJ3aGl0ZVwiLCBzaXplID0gMykgKyBcbiAgZ2VvbV9saW5lKCkgKyBcbiAgZ2d0aXRsZShleHByZXNzaW9uKCsgZXBzaWxvbikpXG5gYGAifQ== -->
+<pre class="r"><code>modeloSurface &lt;- lm(surface_total ~ price, data = ggallyDataNoOutliers)
+ggallyDataNoOutliers %&gt;% 
+  add_predictions(modeloSurface) %&gt;%
+  ggplot(aes(price, pred)) + 
+  geom_line() + 
+  ggtitle(expression(beta[0] + beta[1]*x))
+glance(modeloSurface)
+
+ggallyDataNoOutliers %&gt;% 
+  add_residuals(modeloSurface) %&gt;% 
+  ggplot(aes(price, resid)) + 
+  geom_hline(yintercept = 0, colour = &quot;white&quot;, size = 3) + 
+  geom_line() + 
+  ggtitle(expression(+ epsilon))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#b. Usar la función summary() para obtener informacion de ambos modelos. Explicar los valores de los coeficientes estimados.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShtb2RlbG9Sb29tcylcbnN1bW1hcnkobW9kZWxvU3VyZmFjZSlcbmBgYCJ9 -->
+<pre class="r"><code>summary(modeloRooms)
+summary(modeloSurface)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#c. ¿Cuál modelo usarían para predecir el precio? ¿Por qué? #Respecto a los resultados de la función Sumary preferiría quedarme con el modelo por #habitaciones, tiene un R-Square mucho más alto que el modelo de superficie, y un error estandrd #muchísimo menor. ***********************************************************************************************</p>
 <p>Add a new chunk by clicking the <em>Insert Chunk</em> button on the toolbar or by pressing <em>Ctrl+Alt+I</em>.</p>
 <p>When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the <em>Preview</em> button or press <em>Ctrl+Shift+K</em> to preview the HTML file).</p>
 <p>The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.</p>
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogImVlYTIwMTlfdHAxX1Jpb3NQYWV6X0d1c3Rhdm9BcnR1cm8iDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpUaGlzIGlzIGFuIFtSIE1hcmtkb3duXShodHRwOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tKSBOb3RlYm9vay4gV2hlbiB5b3UgZXhlY3V0ZSBjb2RlIHdpdGhpbiB0aGUgbm90ZWJvb2ssIHRoZSByZXN1bHRzIGFwcGVhciBiZW5lYXRoIHRoZSBjb2RlLiANCg0KVHJ5IGV4ZWN1dGluZyB0aGlzIGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqUnVuKiBidXR0b24gd2l0aGluIHRoZSBjaHVuayBvciBieSBwbGFjaW5nIHlvdXIgY3Vyc29yIGluc2lkZSBpdCBhbmQgcHJlc3NpbmcgKkN0cmwrU2hpZnQrRW50ZXIqLiANCg0KDQpUUDEgRUVBDQoNCmBgYHtyfQ0Kcm0obGlzdD1scygpKQ0KI0HDsWFkaWVuZG8gbGFzIGxpYnJlcsOtYXMgbmVjZXNhcmlhcw0KDQpgYGANCg0KMS5QcmVwYXJhY2lvbiBkZSBsb3MgZGF0b3MgKEkpDQpMZWVyIGVsIGFyY2hpdm8gYXJfcHJvcGVydGllcy5jc3YgeSBtb3N0cmFyIHN1IGVzdHJ1Y3R1cmENCg0KTGV5ZW5kbyBlbCBhcmNoaXZvIHVzYW5kbyByZWFkLnRhYmxlDQpMdWVnbyB1c2FuZG8gR2xpcHNlIHBhcmEgZGFyIHVuIHZpc3Rhem8gYSBsYSBEQg0KdDAsIHQxIHkgdGNvcnJpZGFDU1Ygc2Vyw6FuIHVzYWRvcyBwYXJhIG1lZGlyIGVsIHRpZW1wbyBkZSBsZWN0dXJhIGRlbCBhcmNoaXZvDQpgYGB7cn0NCnQwICAgICAgIDwtICBTeXMudGltZSgpDQphcl9wcm9wZXJ0aWVzIDwtIHJlYWQudGFibGUoImFyX3Byb3BlcnRpZXMuY3N2IiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNlcD0iLCIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZWM9Ii4iLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaGVhZGVyID0gVFJVRSwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZpbGwgPSBUUlVFKQ0KdDEgICAgICAgPC0gIFN5cy50aW1lKCkNCnRjb3JyaWRhQ1NWIDwtICBhcy5udW1lcmljKCB0MSAtIHQwLCB1bml0cyA9ICJzZWNzIikNCmdsaW1wc2UoYXJfcHJvcGVydGllcykNCmBgYA0KDQpWZW1vcyBxdWUgbG9zIG5vbWJyZXMgZGUgYWxndW5hcyB2YXJpYWJsZXMgc29uIHBvY28gZGljaWVudGVzLCBwb3IgbG8gdGFudG8gbW9kaWljYW1vcyBsb3Mgbm9tYnJlcyBkZSBlc3RhIGFjb3JkZSBhIGxvIHF1ZSB2ZW1vcyBlbiBzdXMgY29udGVuaWRvcw0KYGBge3J9DQphcl9wcm9wZXJ0aWVzICU+JSByZW5hbWUoIlBhw61zIiA9IDExKQ0KYGBgDQoNCg0KU2UgZW1waWV6YSBhIGZpbHRyYXIgbGEgQkQgcG9yOg0KDQoNCmBgYHtyfQ0KYXJfcHJvcGVydGllcyAlPiUgZmlsdGVyKElORElDRT4xMDEgfCBHUlVQTyA9PSAiUHJpdmFkb19SZWdpc3RyYWRvIikNCg0KYGBgDQoNClF1ZWRhcnNlIGNvbiBhcXVlbGxvcyByZWdpc3Ryb3MgcXVlOg0KUGVydGVuZWNlbiBhIEFyZ2VudGluYSB5IENhcGl0YWwgRmVkZXJhbA0KQ3V5byBwcmVjaW8gZXN0YSBlbiBkb2xhcmVzIChVU0QpDQpFbCB0aXBvIGRlIHByb3BpZWRhZCBzZWE6IERlcGFydGFtZW50bywgUEggbyBDYXNhDQpFbCB0aXBvIGRlIG9wZXJhY2lvbiBzZWEgVmVudGENCiAgICANClNlbGVjY2lvbmFyIGxhcyB2YXJpYWJsZXMgaWQsIGwzLCByb29tcywgYmVkcm9vbXMsIGJhdGhyb29tcywgc3VyZmFjZV90b3RhbCwgc3VyZmFjZV9jb3ZlcmVkLCBwcmljZSB5IHByb3BlcnR5X3R5cGUNCg0KRGViZXJpYW4gbGxlZ2FyIGEgdW4gZGF0YXNldCBjb24gNjE5MDUgb2JzZXJ2YWNpb25lcyB5IDkgdmFyaWFibGVzDQoNCg0KDQpgYGB7cn0NCg0KdDAgICAgICAgPC0gIFN5cy50aW1lKCkNCmluZGl2aWR1YWxfdDExNyA8LSByZWFkLnRhYmxlKCIuLi9Db2RpZ29Qcm9mL0Z1ZW50ZXMvdXN1X2luZGl2aWR1YWxfdDExNy50eHQiLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc2VwPSI7IiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlYz0iLCIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBoZWFkZXIgPSBUUlVFLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmlsbCA9IFRSVUUpDQp0MSAgICAgICA8LSAgU3lzLnRpbWUoKQ0KdGNvcnJpZGFUWFQgPC0gIGFzLm51bWVyaWMoIHQxIC0gdDAsIHVuaXRzID0gInNlY3MiKQ0KYGBgDQoNCkFkZCBhIG5ldyBjaHVuayBieSBjbGlja2luZyB0aGUgKkluc2VydCBDaHVuayogYnV0dG9uIG9uIHRoZSB0b29sYmFyIG9yIGJ5IHByZXNzaW5nICpDdHJsK0FsdCtJKi4NCg0KV2hlbiB5b3Ugc2F2ZSB0aGUgbm90ZWJvb2ssIGFuIEhUTUwgZmlsZSBjb250YWluaW5nIHRoZSBjb2RlIGFuZCBvdXRwdXQgd2lsbCBiZSBzYXZlZCBhbG9uZ3NpZGUgaXQgKGNsaWNrIHRoZSAqUHJldmlldyogYnV0dG9uIG9yIHByZXNzICpDdHJsK1NoaWZ0K0sqIHRvIHByZXZpZXcgdGhlIEhUTUwgZmlsZSkuDQoNClRoZSBwcmV2aWV3IHNob3dzIHlvdSBhIHJlbmRlcmVkIEhUTUwgY29weSBvZiB0aGUgY29udGVudHMgb2YgdGhlIGVkaXRvci4gQ29uc2VxdWVudGx5LCB1bmxpa2UgKktuaXQqLCAqUHJldmlldyogZG9lcyBub3QgcnVuIGFueSBSIGNvZGUgY2h1bmtzLiBJbnN0ZWFkLCB0aGUgb3V0cHV0IG9mIHRoZSBjaHVuayB3aGVuIGl0IHdhcyBsYXN0IHJ1biBpbiB0aGUgZWRpdG9yIGlzIGRpc3BsYXllZC4NCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogImVlYTIwMTlfdHAxX1Jpb3NQYWV6X0d1c3Rhdm9BcnR1cm8iDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpUUDEgRUVBDQojQcOxYWRpZW5kbyBsYXMgbGlicmVyw61hcyBuZWNlc2FyaWFzDQoNCmBgYHtyfQ0Kcm0obGlzdD1scygpKQ0KbGlicmFyeSgiZHBseXIiKQ0KbGlicmFyeSgidGlkeXZlcnNlIikNCmBgYA0KDQojMS5QcmVwYXJhY2lvbiBkZSBsb3MgZGF0b3MgKEkpIA0KI2EuTGVlciBlbCBhcmNoaXZvIGFyX3Byb3BlcnRpZXMuY3N2IHkgbW9zdHJhciBzdSBlc3RydWN0dXJhDQpMZXllbmRvIGVsIGFyY2hpdm8gdXNhbmRvIHJlYWQudGFibGUNCkx1ZWdvIHVzYW5kbyBHbGlwc2UgcGFyYSBkYXIgdW4gdmlzdGF6byBhIGxhIERCDQp0MCwgdDEgeSB0Y29ycmlkYUNTViBzZXLDoW4gdXNhZG9zIHBhcmEgbWVkaXIgZWwgdGllbXBvIGRlIGxlY3R1cmEgZGVsIGFyY2hpdm8NCg0KYGBge3J9DQp0MCAgICAgICA8LSAgU3lzLnRpbWUoKQ0KYXJfcHJvcGVydGllcyA8LSByZWFkLnRhYmxlKCJUUDEvYXJfcHJvcGVydGllcy5jc3YiLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNlcD0iLCIsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVjPSIuIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICBoZWFkZXIgPSBUUlVFLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZpbGwgPSBUUlVFKQ0KdDEgICAgICAgPC0gIFN5cy50aW1lKCkNCnRjb3JyaWRhQ1NWIDwtICBhcy5udW1lcmljKCB0MSAtIHQwLCB1bml0cyA9ICJzZWNzIikNCmdsaW1wc2UoYXJfcHJvcGVydGllcykNCmBgYA0KDQojYi5RdWVkYXJzZSBjb24gYXF1ZWxsb3MgcmVnaXN0cm9zIHF1ZToNCiMgIGkuUGVydGVuZWNlbiBhIEFyZ2VudGluYSB5IENhcGl0YWwgRmVkZXJhbA0KIyAgaWkuQ3V5byBwcmVjaW8gZXN0YSBlbiBkb2xhcmVzIChVU0QpDQojICBpaWkuRWwgdGlwbyBkZSBwcm9waWVkYWQgc2VhOiBEZXBhcnRhbWVudG8sIFBIIG8gQ2FzYQ0KIyAgaXYuRWwgdGlwbyBkZSBvcGVyYWNpb24gc2VhIFZlbnRhDQojUmV2aXPDqSBsYSB2YXJpYWJsZSBDdXJyZW5jeSBwYXJhIHZlciBzaSB0b2RhcyBlc3RhYmFuIG1hcmNhZGFzIHBvciBVU0QgcGFyYSBkb2xhZXJzDQojUmV2aXPDqSBsb3MgTkEgZW4gY291bnRyeSBsMQ0KI0RlcGVyYXRhbWVudG8gNDIwNDENCiNQSCA0NTY0DQojQ2FzYSAyMTUzNQ0KI1PDs2xvIHBvciBlbCBmaWx0cm8gZGUgIkNhcGl0YWwgRmVkZXJhbCIgdGVuZW1vcyA0NzU3Nw0KDQpgYGB7cn0NCmFyX3Byb3BlcnRpZXNfZmlsdHJhZG8gPC0gYXJfcHJvcGVydGllcyAlPiUgZmlsdGVyKGwxID09ICJBcmdlbnRpbmEiLCBsMiA9PSAiQ2FwaXRhbCBGZWRlcmFsIiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGN1cnJlbmN5ID09ICJVU0QiICwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHByb3BlcnR5X3R5cGUgJWluJSBjKCJDYXNhIiwiUEgiLCAiRGVwYXJ0YW1lbnRvIiksDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBvcGVyYXRpb25fdHlwZSA9PSAiVmVudGEiKQ0KDQpnbGltcHNlKGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8pDQpgYGANCg0KI2MuU2VsZWNjaW9uYXIgbGFzIHZhcmlhYmxlcyBpZCwgbDMsIHJvb21zLCBiZWRyb29tcywgYmF0aHJvb21zLCBzdXJmYWNlX3RvdGFsLCBzdXJmYWNlX2NvdmVyZWQsIHByaWNlIHkgcHJvcGVydHlfdHlwZQ0KDQpgYGB7cn0NCmFyX3Byb3BlcnRpZXNfZmlsdHJhZG8gPC0gYXJfcHJvcGVydGllc19maWx0cmFkbyAlPiUgDQogIHNlbGVjdChpZCwgbDMsIHJvb21zLCBiZWRyb29tcywgYmF0aHJvb21zLCBzdXJmYWNlX3RvdGFsLCBzdXJmYWNlX2NvdmVyZWQsIHByaWNlLCBwcm9wZXJ0eV90eXBlKQ0KZ2xpbXBzZShhcl9wcm9wZXJ0aWVzX2ZpbHRyYWRvKQ0KYGBgDQoNCiMyLkFuYWxpc2lzIGV4cGxvcmF0b3Jpb3MgKEkpDQojYS5PYnRlbmVyIGxhIGNhbnRpZGFkIGRlIHZhbG9yZXMgdW5pY29zIHkgZGUgdmFsb3JlcyBmYWx0YW50ZXMgKE5BcykgcGFyYSBjYWRhIHVuYSBkZSBlc3RhcyB2YXJpYWJsZXMNCiNQYXJhIGVzdG8gdXNhcmVtb3MgbGEgZnVuY2nDs24gJ3VuaXF1ZScNCg0KYGBge3J9DQp1bmlxdWUoYXJfcHJvcGVydGllc19maWx0cmFkbykNCiNQZXJvIGNvbiBhcHBseSBsYSBwb2RlbW9zIGFwbGljYXIgYSB0b2RvIGVsIGRhdGFGcmFtZSBzaW4gZHVwbGljYXIgY8OzZGlnbw0KdW5pcXVlVmFsdWVzIDwtIGFwcGx5KGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8sMix1bmlxdWUpDQojVGVuZW1vcyBjb21vIHJlc3VsdGFkbzoNCnVuaXF1ZVZhbHVlcyRsMw0KI2wzIC01NyBCYXJyaW9zIGVudG9udHJhZG9zIHkgTkENCnVuaXF1ZVZhbHVlcyRyb29tcw0KI3Jvb21zIDE3IGNhdGVnb3LDrWFzICh5IE5BKSBzaW4gZW1iYXJnbyBzZSB0aWVuZW4gdmFsb3JlcyBxdWUgbm8gdGllbmVuIG11Y2hvIHNlbnRpZG8NCiNBbGd1bm9zIGRlIGVsbG9zIHBhcmVjaWVyYW4gc2VyIGV4Y2VzaXZvcw0KdW5pcXVlVmFsdWVzJGJlZHJvb21zDQojYmVkcm9vbXMgMTcgY2F0ZWdvcsOtYXMgKHkgTkEpIHNlIHRpZW5lIHVuIG91dGxpZXIgZGUgMTMwIHF1ZSBkZWJlcsOtYSBzZXIgdW4gZXJyb3IgZGUgdGlwZW8NCiNkYWRvIHF1ZSBlbiByb29tcyBubyB0ZW5lbW9zIG5pbmfDum4gb3V0bGllciBxdWUgc2UgbGUgYWNlcnF1ZQ0KdW5pcXVlVmFsdWVzJGJhdGhyb29tcw0KI2JhdGhyb29tcyAxMiBjYXRlZ29yw61hcyAoeSBOQSkgbG9zIHZhbG9yZXMgbcOhcyBncmFuZGVzIHNvbiBsbGFtYXRpdm9zDQp1bmlxdWVWYWx1ZXMkc3VyZmFjZV90b3RhbA0KdW5pcXVlVmFsdWVzJHN1cmZhY2VfY292ZXJlZA0KDQojc3VyZmFjZV90b3RhbCB5IHN1cmZhY2VfY292ZXJlZCBhbHRhIHZhcmlhYmlsaWRhZCwgZGFkbyBxdWUgZXMgdW5hIHZhcmlhYmxlIG51bcOpcmljYSwgDQojc2UgcG9kcsOtYSB0cmFuc2Zvcm1hciBlbiBjYXRlZ8OzcmljYSByZXZpc2FuZG8gbcOhcyBhIGZvbmRvIGxvcyB2YWxvcmVzDQpzdW1tYXJ5KGFzLmludGVnZXIodW5pcXVlVmFsdWVzJHN1cmZhY2VfdG90YWwpKQ0Kc3VtbWFyeShhcy5pbnRlZ2VyKHVuaXF1ZVZhbHVlcyRzdXJmYWNlX2NvdmVyZWQpKQ0KI1ByaWNlDQp1bmlxdWVWYWx1ZXMkcHJpY2UNCiNwcmljZSBhbHRhIHZhcmlhYmlsaWRhZCwgZGFkbyBxdWUgZXMgdW5hIHZhcmlhYmxlIG51bcOpcmljYSwgDQojc2UgcG9kcsOtYSB0cmFuc2Zvcm1hciBlbiBjYXRlZ8OzcmljYSByZXZpc2FuZG8gbcOhcyBhIGZvbmRvIGxvcyB2YWxvcmVzDQpzdW1tYXJ5KGFzLmludGVnZXIodW5pcXVlVmFsdWVzJHByaWNlKSkNCiNUaXBvIGRlIHByb3BpZWRhZA0KdW5pcXVlVmFsdWVzJHByb3BlcnR5X3R5cGUNCiNMYXMgdHJlcyBnYXRlZ29yw61hcyBmaWx0cmFkYXMgZGVsIGRhdGFzZXQ6IFBILCBDYXNhLCBEZXBhcnRhbWVudG8NCmBgYA0KDQojc3VyZmFjZV90b3RhbCB5IHN1cmZhY2VfY292ZXJlZCBhbHRhIHZhcmlhYmlsaWRhZCwgZGFkbyBxdWUgZXMgdW5hIHZhcmlhYmxlIG51bcOpcmljYSwgDQojc2UgcG9kcsOtYSB0cmFuc2Zvcm1hciBlbiBjYXRlZ8OzcmljYSByZXZpc2FuZG8gbcOhcyBhIGZvbmRvIGxvcyB2YWxvcmVzDQpzdW1tYXJ5KGFzLmludGVnZXIodW5pcXVlVmFsdWVzJHN1cmZhY2VfdG90YWwpKQ0Kc3VtbWFyeShhcy5pbnRlZ2VyKHVuaXF1ZVZhbHVlcyRzdXJmYWNlX2NvdmVyZWQpKQ0KI1ByaWNlDQp1bmlxdWVWYWx1ZXMkcHJpY2UNCiNwcmljZSBhbHRhIHZhcmlhYmlsaWRhZCwgZGFkbyBxdWUgZXMgdW5hIHZhcmlhYmxlIG51bcOpcmljYSwgDQojc2UgcG9kcsOtYSB0cmFuc2Zvcm1hciBlbiBjYXRlZ8OzcmljYSByZXZpc2FuZG8gbcOhcyBhIGZvbmRvIGxvcyB2YWxvcmVzDQpzdW1tYXJ5KGFzLmludGVnZXIodW5pcXVlVmFsdWVzJHByaWNlKSkNCiNUaXBvIGRlIHByb3BpZWRhZA0KdW5pcXVlVmFsdWVzJHByb3BlcnR5X3R5cGUNCiNMYXMgdHJlcyBnYXRlZ29yw61hcyBmaWx0cmFkYXMgZGVsIGRhdGFzZXQ6IFBILCBDYXNhLCBEZXBhcnRhbWVudG8NCg0KI2EuT2J0ZW5lciBsYSBjYW50aWRhZCBkZSB2YWxvcmVzIHVuaWNvcyB5IGRlIHZhbG9yZXMgZmFsdGFudGVzIChOQXMpIHBhcmEgY2FkYSB1bmEgZGUgZXN0YXMgdmFyaWFibGVzDQojQWhvcmEgdmFtb3MgYSB0b3RhbGl6YXIgbG9zIHZhbG9yZXMgZmFsdGFudGVzIHBvciBjb2x1bW5hcCBwYXJhIGVzdG8gdXNhbW9zIGxhIGZ1bmNpw7NuIGFwcGx5IHBhcmEgc3VtYXINCiNzb2JyZSBsb3MgcmVzdWx0YWRvcyBkZSBsYSBtaXNtYSBmdW5jacOzbiBwYXJhIGxpc3RhciBsb3MgaXMubmEgcG9yIGNvbHVtbmEgI2luY2VwdGlvblRpbWUNCg0KYGBge3J9DQphcHBseShhcHBseShhcl9wcm9wZXJ0aWVzX2ZpbHRyYWRvLDIsaXMubmEpLDIsc3VtKQ0KYGBgDQoNCiNiLk9idGVuZXIgbGEgbWF0cml6IGRlIGNvcnJlbGFjaW9uIHBhcmEgbGFzIHZhcmlhYmxlcyBudW1lcmljYXMuIA0KI1BhcmEgbGFzIGNvcnJlbGFjaW9uZXMgdXNhcmVtb3MgbGEgbGlicmVyw61hIGNvcnJyDQoNCmBgYHtyfQ0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KGNvcnJyKQ0KbGlicmFyeShjb3JycGxvdCkNCmBgYA0KDQojU2VwYXJhcmVtb3MgbGFzIHZhcmlhYmxlcyBudW3DqXJpY2FzDQoNCmBgYHtyfQ0KbnVtZXJpY192YXJpYWJsZXMgPC0gIGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8gJT4lIA0KICBzZWxlY3Qocm9vbXMsIGJlZHJvb21zLCBiYXRocm9vbXMsIHN1cmZhY2VfdG90YWwsIHN1cmZhY2VfY292ZXJlZCwgcHJpY2UpDQpnbGltcHNlKG51bWVyaWNfdmFyaWFibGVzKQ0KYGBgDQoNCiNUcmFuc2Zvcm1hbW9zIGxhcyB2YXJpYWJsZXMgY2F0ZWfDs3JpY2FzIGVuIG51bcOpcmljYXMNCg0KYGBge3J9DQpudW1iZXIgPC0gYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIobnVtZXJpY192YXJpYWJsZXMkcm9vbXMpKQ0KbnVtZXJpY192YXJpYWJsZXMgPC0gYXBwbHkoYXBwbHkobnVtZXJpY192YXJpYWJsZXMsMixhcy5jaGFyYWN0ZXIpLCAyLCBhcy5udW1lcmljKQ0KY3JtIDwtIGNvcihudW1lcmljX3ZhcmlhYmxlcywgdXNlPSJjb21wbGV0ZS5vYnMiLCBtZXRob2Q9InBlYXJzb24iKSANCmBgYA0KDQojR2VuZXLDoW1vcyBsYSBtYXRyaXogZGUgY29yZWxhY2lvbmVzDQoNCmBgYHtyfQ0KbGlicmFyeShSQ29sb3JCcmV3ZXIpDQpsaWJyYXJ5KGNvcnJwbG90KQ0KbiA8LSBuY29sKGNybSkNCnAubWF0PC0gbWF0cml4KE5BLCBuLCBuKQ0KY29sIDwtIGNvbG9yUmFtcFBhbGV0dGUoYygiI0JCNDQ0NCIsICIjRUU5OTg4IiwgIiNGRkZGRkYiLCAiIzc3QUFERCIsICIjNDQ3N0FBIikpDQpjb3JycGxvdChjcm0sIG1ldGhvZD0iY29sb3IiLCBjb2w9Y29sKDIwMCksICANCiAgICAgICAgIHR5cGU9InVwcGVyIiwgb3JkZXI9ImhjbHVzdCIsIA0KICAgICAgICAgYWRkQ29lZi5jb2wgPSAiYmxhY2siLCAjIEFkZCBjb2VmZmljaWVudCBvZiBjb3JyZWxhdGlvbg0KICAgICAgICAgdGwuY29sPSJibGFjayIsIHRsLnNydD00NSwgI1RleHQgbGFiZWwgY29sb3IgYW5kIHJvdGF0aW9uDQogICAgICAgICAjIENvbWJpbmUgd2l0aCBzaWduaWZpY2FuY2UNCiAgICAgICAgIHAubWF0ID0gcC5tYXQsIHNpZy5sZXZlbCA9IDAuMDEsIGluc2lnID0gImJsYW5rIiwgDQogICAgICAgICAjIGhpZGUgY29ycmVsYXRpb24gY29lZmZpY2llbnQgb24gdGhlIHByaW5jaXBhbCBkaWFnb25hbA0KICAgICAgICAgZGlhZz1GQUxTRSANCikNCmBgYA0KDQojRW5jb250cmFtb3MgcXVlOg0KI1RvZGFzIGxhcyBjb3JyZWxhY2lvbmVzIGVudHJlIGxhcyB2YXJpYWxiZXMgc29uIHBvc2l0aXZhcy4NCiNDb250cmEgbGEgaGlww7N0ZXNpcyBpbmljaWFsIG5vIHNlIG9ic2VydmEgdW5hIGNvcnJlbGFjacOzbm1hcmNhZGEgZW50cmUgbGEgc3VwZXJmaWNpZSBjdWJpZXJ0YSB5IGVsIHByZWNpbw0KI1NlIG9ic2VydmF1bmEgY29ycmVsYWNpw7NuZW50cmUgZWwgcHJlY2lvIHkgZWwgbsO6bWVybyBkZSBiYcOxb3MgeSBjdWFydG9zDQoNCiMzLlByZXBhcmFjaW9uIGRlIGxvcyBkYXRvcyAoSUkpIA0KI2EuRW4gZWwgcHVudG8gMiBkZWJlcmlhbiBoYWJlciBlbmNvbnRyYWRvIHF1ZSBsYSB2YXJpYWJsZSBiZWRyb29tcyBwcmVzZW50YSB1bmEgYWx0YSANCiNwcm9wb3JjacOzbiBkZSB2YWxvcmVzIGZhbHRhbnRlcyB5IHF1ZSBwcmVzZW50YSB1bmEgZnVlcnRlIGNvcnJlbGFjaW9uIGNvbiBsYSB2YXJpYWJsZSByb29tcy4gDQojUG9yIGxvIHRhbnRvLCB2YW1vcyBhIGVsaW1pbmFybGEuDQojTm90YTogc3VyZmFjZV90b3RhbCB5IHN1cmZhY2VfY292ZXJlZCB0YW1iacOpbiBlc3TDoW4gZXN0cmVjaGFtZW50ZSBjb3JyZWxhY2lvbmFkYXMNCg0KYGBge3J9DQphcl9wcm9wZXJ0aWVzX2ZpbHRyYWRvIDwtIGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8gJT4lIHNlbGVjdCgtYmVkcm9vbXMpDQpgYGANCg0KDQojYi5FbGltaW5hciB0b2RvcyBsb3MgcmVnaXN0cm9zIHF1ZSBwcmVzZW50YW4gdmFsb3JlcyBmYWx0YW50ZXMNCiNQYXJhIGVzdG8gdXNhcmVtb3MgbGEgZnVuY2nDs24gZHJvcF9uYSBkZSB0aWR5cg0KDQpgYGB7cn0NCmxpYnJhcnkodGlkeXIpDQphcl9wcm9wZXJ0aWVzX2ZpbHRyYWRvIDwtIGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8gJT4lIGRyb3BfbmEoKQ0KYGBgDQoNCiM0LkFuYWxpc2lzIGV4cGxvcmF0b3Jpb3MgKElJKSANCiNhLk9idGVuZXIgZXN0YWRpc3RpY2FzIGRlc2NyaXB0aXZhcyBwYXJhIGxhIHZhcmlhYmxlIHByZWNpbyAoY3VhcnRpbGVzLCBwcm9tZWRpbywgbWluaW1vIHkgbWF4aW1vKSB5IA0KI3JlYWxpemFyIHVuIGhpc3RvZ3JhbWEgZGUgbGEgdmFyaWFibGUNCg0KYGBge3J9DQpzdW1tYXJ5UHJlY2lvIDwtIHN1bW1hcnkoYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoYXJfcHJvcGVydGllc19maWx0cmFkbyRwcmljZSkpKQ0Kc3VtbWFyeVByZWNpbw0KcHJpY2VIaXN0b2dyYW0gPC0gcXBsb3QoYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoYXJfcHJvcGVydGllc19maWx0cmFkbyRwcmljZSkpLA0KICAgICAgICAgICAgICAgICAgICAgICAgZ2VvbT0iaGlzdG9ncmFtIiwNCiAgICAgICAgICAgICAgICAgICAgICAgIG1haW4gPSAiSGlzdG9ncmFtYSBkZSBwcmVjaW9zIiwNCiAgICAgICAgICAgICAgICAgICAgICAgIHhsYWIgPSAiUHJlY2lvIiwNCiAgICAgICAgICAgICAgICAgICAgICAgIGJpbnMgPSA1MDApIA0KcHJpY2VIaXN0b2dyYW0NCmBgYA0KDQojQ29tbyB2ZW1vcyBlbCBoaXN0b2dyYW1hIHNlIHZlIGFsZ28gZGlzdG9yc2lvbmFkbyBwb3IgbG9zIHZhbG9yZXMgZXh0cmVtb3MgcXVlIHRpZW5lIA0KI2xhIHZhcmlhYmxlIHByaWNlDQoNCiNiLk9idGVuZXIgZXN0YWRpc3RpY2FzIGRlc2NyaXB0aXZhcyBwYXJhIGxhIHZhcmlhYmxlIHByZWNpbw0KIyhjdWFydGlsZXMsIHByb21lZGlvLCBtaW5pbW8geSBtYXhpbW8pIHBvciBjYWRhIHRpcG8gZGUgcHJvcGllZGFkLg0KDQpgYGB7cn0NCnN1bW1hcnlQcmVjaW9Qb3JUaXBvIDwtIHN1bW1hcnkoYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoYXJfcHJvcGVydGllc19maWx0cmFkbyRwcmljZSkpKQ0Kc3VtbWFyeVByZWNpb1BvclRpcG8gPC0gdGFwcGx5KGFzLm51bWVyaWMoYXMuY2hhcmFjdGVyKGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8kcHJpY2UpKSwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8kcHJvcGVydHlfdHlwZSwgc3VtbWFyeSkNCnN1bW1hcnlQcmVjaW9Qb3JUaXBvIDwtIHN1bW1hcnlQcmVjaW9Qb3JUaXBvW2MoIlBIIiwiRGVwYXJ0YW1lbnRvIiwiQ2FzYSIpXQ0Kc3VtbWFyeVByZWNpb1BvclRpcG8NCmBgYA0KDQojYy5SZWFsaXphciB1biBncmFmaWNvIGRlIGJveHBsb3QgZGUgbGEgdmFyaWFibGUgcHJlY2lvIHBvciB0aXBvIGRlIHByb3BpZWRhZA0KDQpgYGB7cn0NCmFyX3Byb3BlcnRpZXNfZmlsdHJhZG8kcHJpY2UgPC0gYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoYXJfcHJvcGVydGllc19maWx0cmFkbyRwcmljZSkpIA0KZ2dwbG90KGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8sIG1hcHBpbmcgPSBhZXMoeCA9IHByb3BlcnR5X3R5cGUsIHkgPSBwcmljZSwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZ3JvdXAgPSBwcm9wZXJ0eV90eXBlLCBmaWxsID0gcHJvcGVydHlfdHlwZSApKSArDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGdlb21fYm94cGxvdCgpDQpgYGANCg0KI1VuYSB2ZXogbcOhcyBsb3Mgb3V0bGllcnMgbm8gbm9zIHBlcm1pdGVuIHZlciBtdXkgYmllbiBsYSBjb21wYXJhY2nDs24gZW50cmUgbG9zIGJveHBsb3RzDQoNCiNkLlJlYWxpemFyIHVuIGNvcnJlbGFncmFtYSB1c2FuZG8gR0dhbGx5DQoNCmBgYHtyfQ0KbGlicmFyeShHR2FsbHkpDQpnZ2FsbHlEYXRhIDwtIGFyX3Byb3BlcnRpZXNfZmlsdHJhZG8gJT4lIHNlbGVjdChyb29tcywgYmF0aHJvb21zLCBzdXJmYWNlX3RvdGFsLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3VyZmFjZV9jb3ZlcmVkLCBwcmljZSwgcHJvcGVydHlfdHlwZSkNCmdnYWxseURhdGEkcm9vbXMgPC0gYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoZ2dhbGx5RGF0YSRyb29tcykpDQpnZ2FsbHlEYXRhJGJhdGhyb29tcyA8LSBhcy5udW1lcmljKGFzLmNoYXJhY3RlcihnZ2FsbHlEYXRhJGJhdGhyb29tcykpDQpnZ2FsbHlEYXRhJHN1cmZhY2VfdG90YWwgPC0gYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoZ2dhbGx5RGF0YSRzdXJmYWNlX3RvdGFsKSkNCmdnYWxseURhdGEkc3VyZmFjZV9jb3ZlcmVkIDwtIGFzLm51bWVyaWMoYXMuY2hhcmFjdGVyKGdnYWxseURhdGEkc3VyZmFjZV9jb3ZlcmVkKSkNCmdnYWxseURhdGEkcHJvcGVydHlfdHlwZSA8LSBhcy5mYWN0b3IoYXMuY2hhcmFjdGVyKGdnYWxseURhdGEkcHJvcGVydHlfdHlwZSkpDQpsZXZlbHMoZ2dhbGx5RGF0YSRwcm9wZXJ0eV90eXBlKQ0KYGBgDQoNCiNEZXBhcnRhbWVudG8gMTc1OTggLTQxNA0KI1BIIDE4MzEgLTQxNA0KI0Nhc2EgNzEyIC00MTQNCg0KYGBge3J9DQpnZ3BhaXJzKGdnYWxseURhdGEsICBtYXBwaW5nID0gYWVzKGNvbG9yID0gKGdnYWxseURhdGEkcHJvcGVydHlfdHlwZSkpKQ0KYGBgDQoNCiM1Lk91dGxpZXJzDQojYS5FbGltaW5hciBsb3Mgb3V0bGllcnMgZGUgbGEgdmFyaWFibGUgcHJlY2lvIGNvbiBhbGfDum4gY3JpdGVyaW8gcXVlIGVsaWphbi4NCiNMb3MgbWF5b3JlcyBvdXRsaWVycyBkZSBwcmVjaW8gbG9zIGVuY29udHJhbW9zIGVuICJDYXNhIiB5IGVuICJEZXBhcnRhbWVudG8iLg0KI1NvbiBvdXRsaWVycyBzdXBlcmlvcmVzIGVuIGFtYm9zIGNhc29zLCBjb24gbG8gcXVlIGNvbnNpZGVybyBxdWUgbG8gbcOhcyBhcHJvcGlhZG8gc2Vyw61hIGV4Y2x1aXIgDQojbG9zIHZhbG9yZXMgcXVlIHN1cGVyZW4gMyBkaXN0YW5jaWFzIGludGVyLWN1YXJ0aWwgc29icmUgZWwgMyBjdWFydGlsLiANCg0KYGBge3J9DQpzdW1tYXJ5UHJlY2lvUG9yVGlwbw0KI1NpIHVzYW1vcyBDYXNhIHBhcmEgY2FsY3VsYXIgbGFzIGRpc3RuYWNpYXMgaW50ZXJjdWFydGlsDQppbnRlcnFEaXN0YW5jZSA8LSBhcy5udW1lcmljKHN1bW1hcnlQcmVjaW9Qb3JUaXBvJENhc2FbNV0gLSBzdW1tYXJ5UHJlY2lvUG9yVGlwbyRDYXNhWzNdKQ0KaW50ZXJxRGlzdGFuY2UNCiNTaSB1c2Ftb3MgRGVwYXJ0YW1lbnRvIHBhcmEgY2FsY3VsYXIgbGFzIGRpc3RuYWNpYXMgaW50ZXJjdWFydGlsDQppbnRlcnFEaXN0YW5jZSA8LSBhcy5udW1lcmljKHN1bW1hcnlQcmVjaW9Qb3JUaXBvJERlcGFydGFtZW50b1s1XSAtIHN1bW1hcnlQcmVjaW9Qb3JUaXBvJERlcGFydGFtZW50b1szXSkNCmludGVycURpc3RhbmNlDQpgYGANCg0KI1VzYXJlbW9zIERlcGFydGFtZW50bywgZGFkbyBxdWUgZWwgdm9sdW1lbiBkZSBkYXRvcyBlcyBtdWhjbyBtYXlvciBwYXJhIHByb3BpZWRhZGVzIGRlIGVzdGUgdGlwby4NCiNTZSByZWFsaXphcm9uIGV4cGVyaW1lbnRvcyB0YW1iacOpbiB1c2FuZG8gY2FzYSwgcGVybyBlbCBmaWx0cm8gbm8gZXJhIHRhbiBlZmVjdGl2byBjb21vIHNlIGVzcGVyYWJhLg0KDQpgYGB7cn0NCmZpbHRlciA8LSBhcy5udW1lcmljKChpbnRlcnFEaXN0YW5jZSozKSArIHN1bW1hcnlQcmVjaW9Qb3JUaXBvJERlcGFydGFtZW50b1s1XSkNCmZpbHRlcg0KZ2dhbGx5RGF0YU5vT3V0bGllcnMgPC0gZ2dhbGx5RGF0YSAlPiUgZmlsdGVyKGdnYWxseURhdGEkcHJpY2UgPD0gZmlsdGVyKQ0KYGBgDQoNCiNDb24gZXN0byBmaWx0cmFtb3MgdW4gb3V0bGllciBkZSBzdXBlcmZpY2llIHBhcmEgdW4gUEggcXVlIGRpZmljdWx0YSB2ZXIgbGFzIGdyw6FmaWNhcw0KDQpgYGB7cn0NCmdnYWxseURhdGFOb091dGxpZXJzIDwtIGdnYWxseURhdGFOb091dGxpZXJzICU+JSBmaWx0ZXIoZ2dhbGx5RGF0YU5vT3V0bGllcnMkc3VyZmFjZV9jb3ZlcmVkIDwgMTEwMDApDQpzdW1tYXJ5KGdnYWxseURhdGFOb091dGxpZXJzKQ0KYGBgDQoNCiNFbCBmaWx0cm8gYXBsaWNhZG8gcGVybWl0ZSBtdWNoYSBtw6FzIGNsYXJpZGFkIGVuIGxvcyBib3hwbG90IGRlIHByZWNpbywgYWRlbcOhcyBkZSBtYXlvciBjbGFyaWRhZA0KI2VuIGxvcyBncsOhZmljb3MgZGUgcm9vbXMgeSBkZSBiYXRocm9vbXMsIHB1ZXN0byBxdWUgZXhjbHV5ZSB2YWxvcmVzIGRlIG91bGllcnMgZXh0cmVtb3MgcXVlIGFsbMOtIHNlIHRlbsOtYW4uDQoNCiNBbmFsaXNpcyBleHBsb3JhdG9yaW9zIChJSUkpIA0KI2EuT2J0ZW5lciBlc3RhZGlzdGljYXMgZGVzY3JpcHRpdmFzIHBhcmEgbGEgdmFyaWFibGUgcHJlY2lvIChjdWFydGlsZXMsIHByb21lZGlvLCBtaW5pbW8geSBtYXhpbW8pIHkgcmVhbGl6YXIgdW4gaGlzdG9ncmFtYSBkZSBsYSB2YXJpYWJsZQ0KDQpgYGB7cn0NCnN1bW1hcnlQcmVjaW9GaWx0cmFkbyA8LSBzdW1tYXJ5KGFzLm51bWVyaWMoYXMuY2hhcmFjdGVyKGdnYWxseURhdGFOb091dGxpZXJzJHByaWNlKSkpDQpzdW1tYXJ5UHJlY2lvRmlsdHJhZG8NCmBgYA0KDQojRWwgbnVldm8gdmFsb3Jtw6F4bW8gZXMgJCA1NTAuMDAwZXMgbXVjaG8gbWVub3IgcXVlIGVsIHZhbG9yIHF1ZSBzZSB0ZW7DrWEgYW50ZXMsIHNpbiBlbWJhcmdvDQojZXMgZWwgcmVzdWx0YWRvIGRlIGV4cGNsdWlyIGxvcyBvdXRsaWVycyBleHRyZW1vcw0KDQpgYGB7cn0NCnByaWNlSGlzdG9ncmFtRmlsdHJhZG8gPC0gcXBsb3QoYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoZ2dhbGx5RGF0YU5vT3V0bGllcnMkcHJpY2UpKSwNCiAgICAgICAgICAgICAgICAgICAgICAgIGdlb209Imhpc3RvZ3JhbSIsDQogICAgICAgICAgICAgICAgICAgICAgICBtYWluID0gIkhpc3RvZ3JhbWEgZGUgcHJlY2lvcyIsDQogICAgICAgICAgICAgICAgICAgICAgICB4bGFiID0gIlByZWNpbyIsDQogICAgICAgICAgICAgICAgICAgICAgICBiaW5zID0gNTAwKSANCnByaWNlSGlzdG9ncmFtRmlsdHJhZG8NCmBgYA0KDQojRWwgaGlzdG9ncmFtYSBkZSBwcmVjaW9zIGVzIG3DoXMgY2xhcm8gYWhvcmEsc2UgbWFudGllbmUgZXNvIHNpLCBzaWVuZG8gdW5hIGRpc3RyaWJ1Y2lvbiBjb24gY29sYSANCiNhIGxhIGRlcmVjaGENCg0KI2IuT2J0ZW5lciBlc3RhZGlzdGljYXMgZGVzY3JpcHRpdmFzIHBhcmEgbGEgdmFyaWFibGUgcHJlY2lvIChjdWFydGlsZXMsIHByb21lZGlvLCBtaW5pbW8geSBtYXhpbW8pIHBvciBjYWRhIHRpcG8gZGUgcHJvcGllZGFkLg0KDQpgYGB7cn0NCnN1bW1hcnlQcmVjaW9Qb3JUaXBvRmlsdHJhZG8gPC0gc3VtbWFyeShhcy5udW1lcmljKGFzLmNoYXJhY3RlcihnZ2FsbHlEYXRhTm9PdXRsaWVycyRwcmljZSkpKQ0Kc3VtbWFyeVByZWNpb1BvclRpcG9GaWx0cmFkbyA8LSB0YXBwbHkoYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoZ2dhbGx5RGF0YU5vT3V0bGllcnMkcHJpY2UpKSwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGdnYWxseURhdGFOb091dGxpZXJzJHByb3BlcnR5X3R5cGUsIHN1bW1hcnkpDQpzdW1tYXJ5UHJlY2lvUG9yVGlwb0ZpbHRyYWRvIDwtIHN1bW1hcnlQcmVjaW9Qb3JUaXBvRmlsdHJhZG9bYygiUEgiLCJEZXBhcnRhbWVudG8iLCJDYXNhIildDQpzdW1tYXJ5UHJlY2lvUG9yVGlwb0ZpbHRyYWRvDQpgYGANCg0KI0xhIG1lZGlhIG3DoXMgYWx0YSBzaWd1ZSBlc3RhbmRvIHBhcmEgbG9zIGNhc29zIGRlIGxhcyBjYXNhcy4gTG9zIFBIIHkgbG9zIERlcGFydGFtZW50b3MgdGllbmVuDQojbWVkaWFzIG11eSBzaW1pbGFyZXMNCiNjLlJlYWxpemFyIHVuIGdyYWZpY28gZGUgYm94cGxvdCBkZSBsYSB2YXJpYWJsZSBwcmVjaW8gcG9yIHRpcG8gZGUgcHJvcGllZGFkDQoNCmBgYHtyfQ0KZ2dhbGx5RGF0YU5vT3V0bGllcnMkcHJpY2UgPC0gYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoZ2dhbGx5RGF0YU5vT3V0bGllcnMkcHJpY2UpKSANCmdncGxvdChnZ2FsbHlEYXRhTm9PdXRsaWVycywgbWFwcGluZyA9IGFlcyh4ID0gcHJvcGVydHlfdHlwZSwgeSA9IHByaWNlLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBncm91cCA9IHByb3BlcnR5X3R5cGUsIGZpbGwgPSBwcm9wZXJ0eV90eXBlICkpICsNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZ2VvbV9ib3hwbG90KCkNCmBgYA0KDQoNCiNFTCBib3hwbG90IHJlZmxlamEgdmFsb3JlcyBzdXBlcmlvcmVzIGVuIGdlbmVyYWwgcGFyYSBlbCBjYXNvIGRlIGxhcyBjYXNhcyAocHVlZGUgZGFyc2UgZGViaWRvIGEgDQojc3UgdGFtYcOxb2VuIG1ldHJvcyBjdWFkcmFkb3MgeSBhIHN1IG1heW9yIGNhbnRpZGFkIGRlIGFtYmllbnRlcykNCiNkLlJlYWxpemFyIHVuIGNvcnJlbGFncmFtYSB1c2FuZG8gR0dBbGx5DQoNCmBgYHtyfQ0KZ2dwYWlycyhnZ2FsbHlEYXRhTm9PdXRsaWVycywgIG1hcHBpbmcgPSBhZXMoY29sb3IgPSAoZ2dhbGx5RGF0YU5vT3V0bGllcnMkcHJvcGVydHlfdHlwZSkpKQ0KYGBgDQoNCiNFbCBjb3JyZWxvZ3JhbWEgbm9zIG11ZXN0cmEgbWVub3MgY29ycmVsYWNpw7NuIGVucnRlIGxhcyB2YXJpYWJsZXMgcHJlY2lvIHkgY2FudGlkYWQgZGUgYmHDsW9zLCANCiNjdXJpb3NhbWVudGUgbm8gc2UgdmUgdW5hIGNvcnJlbGFjaW9uIGVudHJlIGxhIHN1cGVyZmljaWUgeSBlbCBwcmVjaW8sIHZlbW9zIGVsIHByZWNpbyBtYXMgDQojcmVsYWNpb25hZG8gY29uIGxhIGNhbnRpZGFkIGRlIGJhw7FvcyB5IGNvbiBsYSBjYW50aWRhZCBkZSBoYWJpdGFjaW9uZXMNCg0KIzcuTW9kZWxvIGxpbmVhbA0KI2EuIFJlYWxpemFyIHVuIG1vZGVsbyBsaW5lYWwgc2ltcGxlIHBhcmEgZXhwbGljYXIgZWwgcHJlY2lvIGVuIGZ1bmNpw7NuIGRlIGxhcyBoYWJpdGFjaW9uZXMgKHJvb21zKQ0KI3kgb3RybyBtb2RlbG8gcXVlIGV4cGxpcXVlIGVsIHByZWNpbyBlbiBmdW5jacOzbiBkZSBsYSBzdXBlcmZpY2llIHRvdGFsIChzdXJmYWNlX3RvdGFsKQ0KDQpgYGB7cn0NCiNBw7FhZGltb3MgbGFzIGxpYnJlcsOtYXMgbmVjZXNhcmlhczoNCmxpYnJhcnkobW9kZWxyKQ0KbGlicmFyeShicm9vbSkNCmBgYA0KDQojSW5pY2lhbW9zIGNvbiBlbCBtb2RlbG8gcGFyYSBsYXMgaGFiaXRhY2lvbmVzDQoNCmBgYHtyfQ0KbW9kZWxvUm9vbXMgPC0gbG0ocm9vbXMgfiBwcmljZSwgZGF0YSA9IGdnYWxseURhdGFOb091dGxpZXJzKQ0KZ2dhbGx5RGF0YU5vT3V0bGllcnMgJT4lIA0KICBhZGRfcHJlZGljdGlvbnMobW9kZWxvUm9vbXMpICU+JQ0KICBnZ3Bsb3QoYWVzKHByaWNlLCBwcmVkKSkgKyANCiAgZ2VvbV9saW5lKCkgKyANCiAgZ2d0aXRsZShleHByZXNzaW9uKGJldGFbMF0gKyBiZXRhWzFdKngpKQ0KZ2xhbmNlKG1vZGVsb1Jvb21zKQ0KDQpnZ2FsbHlEYXRhTm9PdXRsaWVycyAlPiUgDQogIGFkZF9yZXNpZHVhbHMobW9kZWxvUm9vbXMpICU+JSANCiAgZ2dwbG90KGFlcyhwcmljZSwgcmVzaWQpKSArIA0KICBnZW9tX2hsaW5lKHlpbnRlcmNlcHQgPSAwLCBjb2xvdXIgPSAid2hpdGUiLCBzaXplID0gMykgKyANCiAgZ2VvbV9saW5lKCkgKyANCiAgZ2d0aXRsZShleHByZXNzaW9uKCsgZXBzaWxvbikpDQpgYGANCg0KI0xvcyByZXNpZHVvcyBubyBzaWd1ZW4gdW4gcGF0csOzbiBkZWZpbmlkbyBxdWUgZXMgbG8gcXVlIGVzdMOhYmFtb3MgZXNwZXJhbmRvDQojQWhvcmEgaGFjZW1vcyBlbCBtb2RlbG8gYSBwYXJ0aXIgZGUgbGEgc3VwZXJmaWNpZSB0b3RhbA0KDQpgYGB7cn0NCm1vZGVsb1N1cmZhY2UgPC0gbG0oc3VyZmFjZV90b3RhbCB+IHByaWNlLCBkYXRhID0gZ2dhbGx5RGF0YU5vT3V0bGllcnMpDQpnZ2FsbHlEYXRhTm9PdXRsaWVycyAlPiUgDQogIGFkZF9wcmVkaWN0aW9ucyhtb2RlbG9TdXJmYWNlKSAlPiUNCiAgZ2dwbG90KGFlcyhwcmljZSwgcHJlZCkpICsgDQogIGdlb21fbGluZSgpICsgDQogIGdndGl0bGUoZXhwcmVzc2lvbihiZXRhWzBdICsgYmV0YVsxXSp4KSkNCmdsYW5jZShtb2RlbG9TdXJmYWNlKQ0KDQpnZ2FsbHlEYXRhTm9PdXRsaWVycyAlPiUgDQogIGFkZF9yZXNpZHVhbHMobW9kZWxvU3VyZmFjZSkgJT4lIA0KICBnZ3Bsb3QoYWVzKHByaWNlLCByZXNpZCkpICsgDQogIGdlb21faGxpbmUoeWludGVyY2VwdCA9IDAsIGNvbG91ciA9ICJ3aGl0ZSIsIHNpemUgPSAzKSArIA0KICBnZW9tX2xpbmUoKSArIA0KICBnZ3RpdGxlKGV4cHJlc3Npb24oKyBlcHNpbG9uKSkNCmBgYA0KDQojYi4gVXNhciBsYSBmdW5jacOzbiBzdW1tYXJ5KCkgcGFyYSBvYnRlbmVyIGluZm9ybWFjaW9uIGRlIGFtYm9zIG1vZGVsb3MuIEV4cGxpY2FyIGxvcyB2YWxvcmVzIGRlIGxvcyBjb2VmaWNpZW50ZXMgZXN0aW1hZG9zLg0KDQpgYGB7cn0NCnN1bW1hcnkobW9kZWxvUm9vbXMpDQpzdW1tYXJ5KG1vZGVsb1N1cmZhY2UpDQpgYGANCg0KI2MuIMK/Q3XDoWwgbW9kZWxvIHVzYXLDrWFuIHBhcmEgcHJlZGVjaXIgZWwgcHJlY2lvPyDCv1BvciBxdcOpPw0KI1Jlc3BlY3RvIGEgbG9zIHJlc3VsdGFkb3MgZGUgbGEgZnVuY2nDs24gU3VtYXJ5IHByZWZlcmlyw61hIHF1ZWRhcm1lIGNvbiBlbCBtb2RlbG8gcG9yIA0KI2hhYml0YWNpb25lcywgdGllbmUgdW4gUi1TcXVhcmUgbXVjaG8gbcOhcyBhbHRvIHF1ZSBlbCBtb2RlbG8gZGUgc3VwZXJmaWNpZSwgeSB1biBlcnJvciBlc3RhbmRyZA0KI211Y2jDrXNpbW8gbWVub3IuDQoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKg0KDQpBZGQgYSBuZXcgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpJbnNlcnQgQ2h1bmsqIGJ1dHRvbiBvbiB0aGUgdG9vbGJhciBvciBieSBwcmVzc2luZyAqQ3RybCtBbHQrSSouDQoNCldoZW4geW91IHNhdmUgdGhlIG5vdGVib29rLCBhbiBIVE1MIGZpbGUgY29udGFpbmluZyB0aGUgY29kZSBhbmQgb3V0cHV0IHdpbGwgYmUgc2F2ZWQgYWxvbmdzaWRlIGl0IChjbGljayB0aGUgKlByZXZpZXcqIGJ1dHRvbiBvciBwcmVzcyAqQ3RybCtTaGlmdCtLKiB0byBwcmV2aWV3IHRoZSBIVE1MIGZpbGUpLg0KDQpUaGUgcHJldmlldyBzaG93cyB5b3UgYSByZW5kZXJlZCBIVE1MIGNvcHkgb2YgdGhlIGNvbnRlbnRzIG9mIHRoZSBlZGl0b3IuIENvbnNlcXVlbnRseSwgdW5saWtlICpLbml0KiwgKlByZXZpZXcqIGRvZXMgbm90IHJ1biBhbnkgUiBjb2RlIGNodW5rcy4gSW5zdGVhZCwgdGhlIG91dHB1dCBvZiB0aGUgY2h1bmsgd2hlbiBpdCB3YXMgbGFzdCBydW4gaW4gdGhlIGVkaXRvciBpcyBkaXNwbGF5ZWQuDQo=</div>
 
 
 
