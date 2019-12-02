@@ -93,10 +93,9 @@ numeric_variables <-  ar_properties_filtrado %>%
 glimpse(numeric_variables)
 
 #Transformamos las variables categóricas en numéricas
-number <- as.numeric(as.character(numeric_variables$rooms))
 numeric_variables <- apply(apply(numeric_variables,2,as.character), 2, as.numeric)
 crm <- cor(numeric_variables, use="complete.obs", method="pearson") 
-
+crm
 #Generámos la matriz de corelaciones
 library(RColorBrewer)
 library(corrplot)
